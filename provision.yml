@@ -1,0 +1,33 @@
+- hosts: localhost
+  connection: local
+  tasks:
+    - debug: msg="Hello Galaxy!"
+    - shell: whoami
+  pre_tasks:
+    - name: Assure galaxyFS dir exists
+      file: path={{ galaxyFS_base_dir }} state=directory owner={{ galaxy_user_name }} group={{ galaxy_user_name }}
+      sudo_user: root
+    - name: Create shed tools dir
+      file: state=directory path={{ galaxy_shed_tools_dir }}
+    - name: Create database dir
+      file: path={{ galaxy_db_dir }} state=directory owner=postgres group=postgres
+      sudo_user: root
+  roles:
+      - role: galaxyprojectdotorg.cloudmanimage
+        tags: image
+      - role: galaxyprojectdotorg.cloudmandatabase
+        sudo: yes
+        sudo_user: postgres
+        tags: database
+      - role: galaxyprojectdotorg.galaxy
+        tags: galaxy
+      - role: galaxyprojectdotorg.galaxyextras
+        tags: galaxyextras
+      - role: galaxyprojectdotorg.devbox
+        tags: devbox
+#     - role: galaxyprojectdotorg.cloudmantrackster
+#       tags: cloudmantrackster
+#     - role: smola.java
+#       tags: java
+#       java_packages:
+#         - oracle-java7-installer

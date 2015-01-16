@@ -1,0 +1,34 @@
+---
+- name: Install the debs
+  sudo: True
+  apt: name={{ item }} state=latest update_cache=yes
+  with_items:
+    - build-essential
+    - curl
+    - git
+    - m4
+    - ruby
+    - texinfo
+    - libbz2-dev
+    - libcurl4-openssl-dev
+    - libexpat-dev
+    - libncurses-dev
+    - libncursesw5-dev
+    - zlib1g-dev
+    - python-dev
+    - cmake
+
+- name: Install linuxbrew
+  sudo: True
+  sudo_user: "{{ galaxy_user_name }}"
+  shell: "ruby -e \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/linuxbrew/go/install)\""
+
+- name: Tap galaxyproject recipes
+  sudo: True
+  sudo_user: "{{ galaxy_user_name }}"
+  shell: "~/.linuxbrew/bin/brew tap galaxyproject/tap"
+
+- name: Install planemo
+  sudo: True
+  sudo_user: "{{ galaxy_user_name }}"
+  shell: "/home/{{ galaxy_user_name }}/.linuxbrew/bin/brew install -v planemo"

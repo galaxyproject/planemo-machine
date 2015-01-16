@@ -1,0 +1,58 @@
+---
+# group_vars/all
+#
+#   Common variables across all roles
+
+galaxyFS_base_dir: /opt/galaxy
+galaxy_server_dir: "{{ galaxyFS_base_dir }}/galaxy-app"
+galaxy_venv_dir: "{{ galaxy_server_dir }}/.venv"
+galxy_egg_cache: "/home/{{ galaxy_user_name }}/.python-eggs"
+galaxy_root: "{{ galaxy_server_dir}}"
+galaxy_db_dir: "{{ galaxyFS_base_dir }}/db"
+galaxy_db_port: 5930
+galaxy_db_log: /tmp/pSQL.log
+galaxy_config_file: "{{ galaxy_server_dir }}/config/galaxy.ini"
+postgresql_bin_dir: /usr/lib/postgresql/9.3/bin
+
+galaxy_shed_tools_dir: "{{ galaxyFS_base_dir }}/shed_tools"
+len_file_path: "{{ galaxyFS_base_dir }}/configuration_data/len"
+
+galaxy_ini_path: "{{ galaxy_server_dir }}/config/galaxy.ini"
+galaxy_log_dir: /home/{{ galaxy_user_name }}
+
+# TODO: work on proftpd
+galaxy_extras_install_packages: true
+
+supervisor_postgres_database_path: "{{ galaxy_db_dir }}"
+supervisor_slurm_config_dir: "/home/{{ galaxy_user_name }}"
+# Disable management/user features for devbox.
+supervisor_manage_reports: false
+supervisor_manage_nodeproxy: false
+
+galaxy_config:
+  "app:main":
+    "database_connection": "postgres://{{ galaxy_user_name }}@localhost:{{ galaxy_db_port }}/galaxy"
+    "static_enabled": "False"
+    "nginx_x_accel_redirect_base": "/_x_accel_redirect"
+    "nginx_x_archive_files_base": "/_x_accel_redirect"
+    "nginx_upload_store": "database/tmp/upload_store"
+    "nginx_upload_path": "/_upload"
+  "uwsgi":
+    "socket": "127.0.0.1:4001"
+    "stats": "127.0.0.1:9191"
+    "processes": "2"
+    "threads": "4"
+    "master": "True"
+    "logto": "{{ galaxy_log_dir }}/uwsgi.log"
+    "logdate": "True"
+    "pythonpath": "lib"
+  "server:handler0":
+    "use": "egg:Paste#http"
+    "port": "9010"
+    "use_threadpool": "True"
+    "threadpool_workers": "10"
+  "server:handler1":
+    "use": "egg:Paste#http"
+    "port": "9011"
+    "use_threadpool": "True"
+    "threadpool_workers": "10"
