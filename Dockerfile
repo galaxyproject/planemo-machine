@@ -1,6 +1,8 @@
 # A piece-wise version of roughly the packer recipe for Docker, this
 # is much better than packer for interactive debugging, incrementally building
-# the image, etc....
+# the image, etc... but is only for testing. To build final produces ignore
+# this file and use package.json.
+
 FROM toolshed/requirements
 MAINTAINER John Chilton <jmchilton@gmail.com>
 
@@ -29,15 +31,18 @@ RUN sh /tmp/setup_docker.sh
 # Pretasks (somehow should get this into a role for reuse)
 WORKDIR /tmp/ansible
 RUN mkdir /opt/galaxy && mkdir /opt/galaxy/shed_tools && chown -R ubuntu:ubuntu /opt/galaxy
+# Pre-clone Galaxy into its final destination early in Dockerfile so ansible task
+# runs quicker.
 USER ubuntu
 RUN hg clone https://bitbucket.org/galaxy/galaxy-dist /opt/galaxy/galaxy-app
 USER root
 RUN mkdir /opt/galaxy/db &&  chown -R postgres:postgres /opt/galaxy/db
 ADD group_vars/all /tmp/ansible/vars.yml
-#ADD roles/galaxyprojectdotorg.cloudmanimage /tmp/ansible/roles/galaxyprojectdotorg.cloudmanimage
 ADD roles/ /tmp/ansible/roles
 ADD provision.yml /tmp/ansible/provision.yml
 RUN ansible-playbook /tmp/ansible/provision.yml --extra-vars galaxy_user_name=ubuntu --tags=image -c local -e "@vars.yml"
+# Database creation and migration need to happen in the same step so
+# that postgres is still running.
 RUN ansible-playbook /tmp/ansible/provision.yml --extra-vars galaxy_user_name=ubuntu --tags=database -c local -e "@vars.yml" && \
         ansible-playbook /tmp/ansible/provision.yml --extra-vars galaxy_user_name=ubuntu --tags=galaxy -c local -e "@vars.yml"
 RUN ansible-playbook /tmp/ansible/provision.yml --extra-vars galaxy_user_name=ubuntu --tags=galaxyextras -c local -e "@vars.yml"
