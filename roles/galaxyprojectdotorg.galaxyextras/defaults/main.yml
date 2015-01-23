@@ -2,6 +2,7 @@ galaxy_extras_config_nginx: true
 galaxy_extras_config_proftpd: true
 galaxy_extras_config_slurm: true
 galaxy_extras_config_supervisor: true
+galaxy_extras_config_galaxy_root: true
 
 galaxy_extras_install_packages: false
 
@@ -23,8 +24,6 @@ proftpd_db_password: galaxy
 proftpd_welcome: "Public Galaxy FTP"
 proftpd_files_dir: /export/galaxy-central/database/ftp
 
-
-
 supervisor_conf_path: "/etc/supervisor/conf.d/galaxy.conf"
 supervisor_manage_slurm: true
 supervisor_slurm_config_dir: "/home/galaxy"
@@ -35,3 +34,10 @@ supervisor_manage_nginx: true
 supervisor_manage_reports: true
 supervisor_manage_nodeproxy: true
 supervisor_manage_docker: true
+
+supervisor_webserver: true
+supervisor_webserver_port: "0.0.0.0:9001"
+supervisor_webserver_username: null
+supervisor_webserver_password: changeme
+
+

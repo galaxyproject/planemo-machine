@@ -1,6 +1,15 @@
 [supervisord]
 nodaemon=false
 
+{% if supervisor_webserver %}
+[inet_http_server]
+port={{ supervisor_webserver_port }}
+{% if supervisor_webserver_username %}
+username={{ supervisor_webserver_username }}
+password={{ supervisor_webserver_password }}
+{% endif %}
+{% endif %}
+
 {% if supervisor_manage_slurm %}
 [program:munge]
 user=root

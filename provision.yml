@@ -20,6 +20,8 @@
         sudo_user: postgres
         tags: database
       - role: galaxyprojectdotorg.galaxy
+        sudo: yes
+        sudo_user: "{{ galaxy_user_name }}"
         tags: galaxy
       - role: galaxyprojectdotorg.galaxyextras
         tags: galaxyextras

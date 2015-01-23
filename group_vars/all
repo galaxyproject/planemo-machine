@@ -35,7 +35,7 @@ galaxy_config:
     "static_enabled": "False"
     "nginx_x_accel_redirect_base": "/_x_accel_redirect"
     "nginx_x_archive_files_base": "/_x_accel_redirect"
-    "nginx_upload_store": "database/tmp/upload_store"
+    "nginx_upload_store": "{{ nginx_upload_store_path }}"
     "nginx_upload_path": "/_upload"
   "uwsgi":
     "socket": "127.0.0.1:4001"

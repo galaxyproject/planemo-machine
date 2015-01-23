@@ -19,10 +19,10 @@ RUN apt-get install -y ant atop axel bioperl cmake curl g++ gcc gfortran git-cor
             make mercurial nmon openssh-server patch postgresql postgresql postgresql-client postgresql-plpython-9.3 \
             python-dev python-prettytable python-psycopg2 rsync slurm-drmaa-dev swig sysstat unzip vim wget zlib1g-dev \
             ansible build-essential git m4 ruby texinfo libbz2-dev libcurl4-openssl-dev libexpat-dev \
-            automake build-essential fail2ban fuse glusterfs-client libcurl4-openssl-dev libfuse-dev libfuse2 \
+            automake fail2ban fuse glusterfs-client libcurl4-openssl-dev libfuse-dev libfuse2 \
             libpcre3-dev libreadline6-dev libslurm-dev libssl-dev libtool libxml2-dev libmunge-dev lxc-docker \
             mime-support munge nfs-common nfs-kernel-server pkg-config postgresql-server-dev-9.3 python-pip python-tk \
-            rabbitmq-server slurm-llnl xfsprogs nginx-extras
+            rabbitmq-server slurm-llnl xfsprogs nginx-extras nodejs npm emacs24-nox
 
 
 ADD scripts/setup_docker.sh /tmp/setup_docker.sh
@@ -46,4 +46,8 @@ RUN ansible-playbook /tmp/ansible/provision.yml --extra-vars galaxy_user_name=ub
 RUN ansible-playbook /tmp/ansible/provision.yml --extra-vars galaxy_user_name=ubuntu --tags=database -c local -e "@vars.yml" && \
         ansible-playbook /tmp/ansible/provision.yml --extra-vars galaxy_user_name=ubuntu --tags=galaxy -c local -e "@vars.yml"
 RUN ansible-playbook /tmp/ansible/provision.yml --extra-vars galaxy_user_name=ubuntu --tags=galaxyextras -c local -e "@vars.yml"
+ENV USER root
 RUN ansible-playbook /tmp/ansible/provision.yml --extra-vars galaxy_user_name=ubuntu --tags=devbox -c local -e "@vars.yml"
+
+#CMD ["/usr/sbin/service", "supervisor", "start"]
+CMD ["/usr/bin/supervisord", "-n"]

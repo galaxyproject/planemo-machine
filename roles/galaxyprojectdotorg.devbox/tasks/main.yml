@@ -32,3 +32,28 @@
   sudo: True
   sudo_user: "{{ galaxy_user_name }}"
   shell: "/home/{{ galaxy_user_name }}/.linuxbrew/bin/brew install -v planemo"
+
+- name: Install the dev tools
+  sudo: True
+  apt: name={{ item }} state=latest update_cache=yes
+  with_items:
+    - emacs24-nox
+
+- name: Install node and npm for codebox.
+  sudo: True
+  apt: name={{ item }} state=latest update_cache=yes
+  with_items:
+    - nodejs
+    - npm
+
+- name: Link nodejs to node
+  sudo: True
+  shell: "ln -f -s /usr/bin/nodejs /usr/bin/node"
+
+- name: Install codebox.
+  sudo: True
+  sudo_user: "{{ galaxy_user_name }}"
+  shell: "mkdir -p {{ codebox_path }} && cd {{ codebox_path }} && npm install codebox"
+
+- name: Add codebox to supervisor configuration.
+  template: src=supervisor.conf.j2 dest=/etc/supervisor/conf.d/codebox.conf
