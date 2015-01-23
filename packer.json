@@ -133,6 +133,11 @@
       "type": "shell"
     },
     {
+      "override": {
+        "virtualbox-iso": {
+          "command": "echo '{{ user `username` }}' | ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 sudo -S -E ansible-playbook"
+        }
+      },
       "type": "ansible-local",
       "playbook_file": "provision.yml",
       "role_paths": [
