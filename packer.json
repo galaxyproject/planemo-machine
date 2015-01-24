@@ -154,6 +154,17 @@
          "galaxy_user_name={{ user `username` }}"
       ],
       "group_vars": "group_vars"
+    },
+    {
+      "override": {
+        "virtualbox-iso": {
+          "execute_command": "echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'"
+        }
+      },
+      "scripts": [
+        "scripts/cleanup.sh"
+      ],
+      "type": "shell"
     }
   ]
 }

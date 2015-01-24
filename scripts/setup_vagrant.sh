@@ -26,3 +26,14 @@ cd ~vagrant/.ssh
 wget --no-check-certificate 'https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub' -O authorized_keys
 chmod 600 ~vagrant/.ssh/authorized_keys
 chown -R vagrant ~vagrant/.ssh
+
+mkdir /tmp/virtualbox
+VERSION=$(cat /home/vagrant/.vbox_version)
+mount -o loop /home/vagrant/VBoxGuestAdditions_$VERSION.iso /tmp/virtualbox
+# Following line will return a non-zero exit code because
+# X11 extensions cannot be installed. This is fine - so just
+# keep going.
+sh /tmp/virtualbox/VBoxLinuxAdditions.run | true
+umount /tmp/virtualbox
+rmdir /tmp/virtualbox
+rm /home/vagrant/*.iso

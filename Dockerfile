@@ -49,5 +49,8 @@ RUN ansible-playbook /tmp/ansible/provision.yml --extra-vars galaxy_user_name=ub
 ENV USER root
 RUN ansible-playbook /tmp/ansible/provision.yml --extra-vars galaxy_user_name=ubuntu --tags=devbox -c local -e "@vars.yml"
 
+ADD scripts/cleanup.sh /tmp/cleanup.sh
+RUN sh /tmp/cleanup.sh
+
 #CMD ["/usr/sbin/service", "supervisor", "start"]
 CMD ["/usr/bin/supervisord", "-n"]
