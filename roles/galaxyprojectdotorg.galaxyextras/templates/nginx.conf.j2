@@ -36,6 +36,15 @@ http {
             include uwsgi_params;
         }
 
+        {% if nginx_proxy_ide %}
+        location /ide {
+            rewrite /ide/(.*) /$1  break;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_pass http://localhost:{{ codebox_port }};
+        }
+        {% endif %}
+
         # serve static content
         location /static {
             alias {{ galaxy_root }}/static;

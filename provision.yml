@@ -9,6 +9,11 @@
       sudo_user: root
     - name: Create shed tools dir
       file: state=directory path={{ galaxy_shed_tools_dir }}
+    - name: Install postgres system package (creates user for next step)
+      apt: pkg=postgresql state=latest
+    - name: Install python-virtualenv system package
+      apt: pkg=python-virtualenv state=latest
+      # cloudman uses PIP, I think this is preferable?
     - name: Create database dir
       file: path={{ galaxy_db_dir }} state=directory owner=postgres group=postgres
       sudo_user: root

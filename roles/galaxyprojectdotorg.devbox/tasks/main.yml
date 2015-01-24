@@ -57,3 +57,6 @@
 
 - name: Add codebox to supervisor configuration.
   template: src=supervisor.conf.j2 dest=/etc/supervisor/conf.d/codebox.conf
+
+- name: Add dev tool configuration file.
+  template: src=dev_tool_conf.xml.j2 dest={{ dev_tool_conf }}

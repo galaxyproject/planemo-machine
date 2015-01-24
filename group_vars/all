@@ -16,12 +16,16 @@ postgresql_bin_dir: /usr/lib/postgresql/9.3/bin
 
 galaxy_shed_tools_dir: "{{ galaxyFS_base_dir }}/shed_tools"
 len_file_path: "{{ galaxyFS_base_dir }}/configuration_data/len"
+dev_tool_conf: "{{ galaxyFS_base_dir }}/dev_tool_conf.xml"
+dev_tool_conf_dir: "{{ galaxyFS_base_dir }}/tools"
 
 galaxy_ini_path: "{{ galaxy_server_dir }}/config/galaxy.ini"
 galaxy_log_dir: /home/{{ galaxy_user_name }}
 
 # TODO: work on proftpd
 galaxy_extras_install_packages: true
+
+nginx_proxy_ide: true
 
 supervisor_postgres_database_path: "{{ galaxy_db_dir }}"
 supervisor_slurm_config_dir: "/home/{{ galaxy_user_name }}"
@@ -37,6 +41,7 @@ galaxy_config:
     "nginx_x_archive_files_base": "/_x_accel_redirect"
     "nginx_upload_store": "{{ nginx_upload_store_path }}"
     "nginx_upload_path": "/_upload"
+    "tool_config_file": "config/tool_conf.xml.sample,config/shed_tool_conf.xml,{{ dev_tool_conf }}"
   "uwsgi":
     "socket": "127.0.0.1:4001"
     "stats": "127.0.0.1:9191"

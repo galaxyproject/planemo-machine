@@ -1,9 +1,8 @@
 TODO:
 
- * Add watchdog in galaxy_venv_dir
- * Add configurable user tool's directory.
- * Add this tool directory to Galaxy's configuration.
- * Point codebox.io at this directory.
+- Proxy Supervisor
+- IPython support.
+
 
 
 
