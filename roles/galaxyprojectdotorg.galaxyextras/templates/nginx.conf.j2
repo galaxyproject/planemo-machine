@@ -34,6 +34,10 @@ http {
         location / {
             uwsgi_pass 127.0.0.1:4001;
             include uwsgi_params;
+            {% if galaxy_admin_user is defined and galaxy_admin_user %}
+            # hard-code a fixed user to pass to Galaxy to auto-login
+            uwsgi_param HTTP_REMOTE_USER '{{ galaxy_admin_user }}';
+            {% endif %}
         }
 
         {% if nginx_proxy_ide %}
