@@ -7,14 +7,12 @@ FROM toolshed/requirements
 MAINTAINER John Chilton <jmchilton@gmail.com>
 
 # Pre-install a bunch of packages to speed up ansible steps.
-RUN apt-get update -y
-RUN apt-get install -y software-properties-common
-RUN apt-add-repository -y ppa:ansible/ansible
-RUN apt-add-repository -y ppa:galaxyproject/nginx
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
-RUN sh -c "echo 'deb https://get.docker.io/ubuntu docker main' > /etc/apt/sources.list.d/docker.list"
-RUN apt-get update -y
-RUN apt-get install -y ant atop axel bioperl cmake curl g++ gcc gfortran git-core htop iftop iotop \
+RUN apt-get update -y && apt-get install -y software-properties-common && \
+    apt-add-repository -y ppa:ansible/ansible && apt-add-repository -y ppa:galaxyproject/nginx && \
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9 && \
+    sh -c "echo 'deb https://get.docker.io/ubuntu docker main' > /etc/apt/sources.list.d/docker.list"
+RUN apt-get update -y && \
+    apt-get install -y ant atop axel bioperl cmake curl g++ gcc gfortran git-core htop iftop iotop \
             ipython libffi-dev liblapack-dev libncurses5-dev libopenblas-dev libpam0g-dev libpq-dev libsparsehash-dev \
             make mercurial nmon openssh-server patch postgresql postgresql postgresql-client postgresql-plpython-9.3 \
             python-dev python-prettytable python-psycopg2 rsync slurm-drmaa-dev swig sysstat unzip vim wget zlib1g-dev \
