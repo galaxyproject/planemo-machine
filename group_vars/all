@@ -7,6 +7,10 @@ galaxyFS_base_dir: /opt/galaxy
 galaxy_server_dir: "{{ galaxyFS_base_dir }}/galaxy-app"
 galaxy_venv_dir: "{{ galaxy_server_dir }}/.venv"
 galxy_egg_cache: "/home/{{ galaxy_user_name }}/.python-eggs"
+dev_user_name: "{{ galaxy_user_name }}"
+dev_user_home: "/home/{{ dev_user_name }}"
+dev_user_shellrc: "{{ dev_user_home }}/.bashrc"
+
 galaxy_root: "{{ galaxy_server_dir}}"
 galaxy_db_dir: "{{ galaxyFS_base_dir }}/db"
 galaxy_db_port: 5930

@@ -20,18 +20,22 @@
 
 - name: Install linuxbrew
   sudo: True
-  sudo_user: "{{ galaxy_user_name }}"
+  sudo_user: "{{ dev_user_name }}"
   shell: "ruby -e \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/linuxbrew/go/install)\""
 
 - name: Tap galaxyproject recipes
   sudo: True
-  sudo_user: "{{ galaxy_user_name }}"
-  shell: "~/.linuxbrew/bin/brew tap galaxyproject/tap"
+  sudo_user: "{{ dev_user_name }}"
+  shell: "{{ dev_user_home }}//.linuxbrew/bin/brew tap galaxyproject/tap"
 
 - name: Install planemo
   sudo: True
-  sudo_user: "{{ galaxy_user_name }}"
-  shell: "/home/{{ galaxy_user_name }}/.linuxbrew/bin/brew install -v planemo"
+  sudo_user: "{{ dev_user_name }}"
+  shell: "{{ dev_user_home }}/.linuxbrew/bin/brew install -v planemo"
+
+# TODO: MANPATH, INFOPATH
+- name: Add linuxbrew to dev users PATH
+  lineinfile: "dest={{ dev_user_shellrc }} line='export PATH={{ dev_user_home }}/.linuxbrew/bin:$PATH'"
 
 - name: Install the dev tools
   sudo: True
