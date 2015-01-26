@@ -32,7 +32,7 @@ RUN mkdir /opt/galaxy && mkdir /opt/galaxy/shed_tools && chown -R ubuntu:ubuntu 
 # Pre-clone Galaxy into its final destination early in Dockerfile so ansible task
 # runs quicker.
 USER ubuntu
-RUN hg clone https://bitbucket.org/galaxy/galaxy-dist /opt/galaxy/galaxy-app
+RUN hg clone https://bitbucket.org/galaxy/galaxy-central /opt/galaxy/galaxy-app
 USER root
 RUN mkdir /opt/galaxy/db &&  chown -R postgres:postgres /opt/galaxy/db
 ADD group_vars/all /tmp/ansible/vars.yml

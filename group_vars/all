@@ -11,6 +11,9 @@ dev_user_name: "{{ galaxy_user_name }}"
 dev_user_home: "/home/{{ dev_user_name }}"
 dev_user_shellrc: "{{ dev_user_home }}/.bashrc"
 
+galaxy_repo: https://bitbucket.org/galaxy/galaxy-central
+galaxy_changeset_id: default
+
 galaxy_root: "{{ galaxy_server_dir}}"
 galaxy_db_dir: "{{ galaxyFS_base_dir }}/db"
 galaxy_db_port: 5930
