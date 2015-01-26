@@ -1,20 +1,28 @@
 planemo-machine
 =====================
 
-A set of [packer](http://packer.io) configuration files and scripts
-used to build Ubuntu environment for
+A set of [packer](http://packer.io) and
+[ansible](http://www.ansible.com/) configuration files and scripts
+used to build [Ubuntu](http://www.ubuntu.com/) environment for
 [Galaxy](http://galaxyproject.org) tool development.
 
 Example Uses
 -----------------------
 
- * Build Docker image.
+ * Build Docker image (using packer).
 
 ``packer build --only docker packer.json``
 
- * Build Docker image based on toolshed base dependencies (much faster).
+ * Build Docker image (using packer) based on toolshed base dependencies (much faster).
 
 ``packer build -var 'docker_base=toolshed/requirements' --only docker packer.json``
+
+ * Build a modified variant of the recipes with a docker file directly
+     (skipping packer). Skipping packer makes it easier to iterate on and applicable
+     for tools like Docker Hub, the cost is some amount of duplication between
+     the ``Dockerfile`` in this directory and ``provision.yml``.
+
+``docker build .``
 
  * Build and register Vagrant box (named galaxydev).
 
