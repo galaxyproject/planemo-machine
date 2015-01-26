@@ -64,3 +64,7 @@
 
 - name: Add dev tool configuration file.
   template: src=dev_tool_conf.xml.j2 dest={{ dev_tool_conf }}
+
+- name: Add planemo machine web content
+  git: repo={{ planemo_machine_web_repo }} dest={{ planemo_machine_web_dir }} accept_hostkey=yes
+  when: nginx_serve_planemo_machine_web

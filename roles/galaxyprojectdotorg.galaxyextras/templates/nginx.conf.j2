@@ -49,6 +49,13 @@ http {
         }
         {% endif %}
 
+        {% if nginx_serve_planemo_machine_web %}
+        location /planemo {
+            alias {{ planemo_machine_web_dir }};
+        }
+        {% endif %}
+
+
         # serve static content
         location /static {
             alias {{ galaxy_root }}/static;

@@ -36,6 +36,9 @@ galaxy_extras_install_packages: true
 galaxy_admin_user: "dev@galaxyproject.org"
 
 nginx_proxy_ide: true
+nginx_serve_planemo_machine_web: true
+planemo_machine_web_repo: git://github.com/jmchilton/planemo-machine-web.git
+planemo_machine_web_dir: "{{ galaxyFS_base_dir }}/planemo-machine-web"
 
 supervisor_postgres_database_path: "{{ galaxy_db_dir }}"
 supervisor_slurm_config_dir: "/home/{{ galaxy_user_name }}"
