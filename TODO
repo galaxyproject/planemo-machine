@@ -3,6 +3,8 @@ TODO:
 - Proxy Supervisor
 - IPython support.
 
-
-
-
+Brackets Support (more baked than codebox in some ways but not meant for use within web browser):
+  npm install -g brackets
+  brackets --port 9001 --proj-dir /opt/galaxy/tools --supp-dir /opt/galaxy/brackets_support -d true
+    - Install extension
+	- https://github.com/johnhidey/hdy.brackets-shell/
