@@ -141,12 +141,12 @@
       "type": "ansible-local",
       "playbook_file": "provision.yml",
       "role_paths": [
-        "roles/galaxyprojectdotorg.cloudmanimage",
+        "roles/galaxyprojectdotorg.galaxy-os",
         "roles/galaxyprojectdotorg.cloudmandatabase",
         "roles/galaxyprojectdotorg.cloudmantrackster",
         "roles/galaxyprojectdotorg.devbox",
         "roles/galaxyprojectdotorg.galaxy",
-        "roles/galaxyprojectdotorg.galaxyextras",
+        "roles/galaxyprojectdotorg.galaxy-extras",
         "roles/smola.java"
       ],
       "extra_arguments": [

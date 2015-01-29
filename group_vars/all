@@ -3,6 +3,9 @@
 #
 #   Common variables across all roles
 
+# Used by galaxy-os
+add_system_users: no
+
 galaxyFS_base_dir: /opt/galaxy
 galaxy_server_dir: "{{ galaxyFS_base_dir }}/galaxy-app"
 galaxy_venv_dir: "{{ galaxy_server_dir }}/.venv"
