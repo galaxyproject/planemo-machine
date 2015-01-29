@@ -4,3 +4,9 @@
 [submodule "roles/galaxyprojectdotorg.galaxy-os"]
 	path = roles/galaxyprojectdotorg.galaxy-os
 	url = https://github.com/galaxyproject/ansible-galaxy-os.git
+[submodule "roles/galaxyprojectdotorg.galaxy"]
+	path = roles/galaxyprojectdotorg.galaxy
+	url = https://github.com/galaxyproject/ansible-galaxy.git
+[submodule "roles/galaxyprojectdotorg.cloudman-database"]
+	path = roles/galaxyprojectdotorg.cloudman-database
+	url = https://github.com/galaxyproject/ansible-cloudman-database.git

@@ -142,7 +142,7 @@
       "playbook_file": "provision.yml",
       "role_paths": [
         "roles/galaxyprojectdotorg.galaxy-os",
-        "roles/galaxyprojectdotorg.cloudmandatabase",
+        "roles/galaxyprojectdotorg.cloudman-database",
         "roles/galaxyprojectdotorg.cloudmantrackster",
         "roles/galaxyprojectdotorg.devbox",
         "roles/galaxyprojectdotorg.galaxy",

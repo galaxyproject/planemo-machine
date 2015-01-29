@@ -21,6 +21,8 @@ galaxy_root: "{{ galaxy_server_dir}}"
 galaxy_db_dir: "{{ galaxyFS_base_dir }}/db"
 galaxy_db_port: 5930
 galaxy_db_log: /tmp/pSQL.log
+psql_galaxyftp_password: devboxpass
+
 galaxy_config_file: "{{ galaxy_server_dir }}/config/galaxy.ini"
 postgresql_bin_dir: /usr/lib/postgresql/9.3/bin
 
