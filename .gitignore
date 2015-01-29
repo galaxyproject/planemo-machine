@@ -2,3 +2,4 @@ packer_cache
 *.box
 *.backup
 docker*.tar
+gce_account.json
