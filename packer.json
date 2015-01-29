@@ -78,7 +78,8 @@
       "account_file": "{{user `gce_account_file`}}",
       "project_id": "{{user `gce_project_id`}}",
       "source_image": "{{user `gce_source_image`}}",
-      "zone": "{{user `gce_zone`}}"
+      "zone": "{{user `gce_zone`}}",
+      "image_name": "planemo-machine-{{timestamp}}"
     }
   ],
   "post-processors": [
