@@ -13,7 +13,7 @@
     "ami_name": "galaxydev {{timestamp}}",
     "gce_account_file": "gce_account.json",
     "gce_project_id": "galaxydev",
-    "gce_source_image": "ubuntu-14-04",
+    "gce_source_image": "ubuntu-1404-trusty-v20150127",
     "gce_zone": "us-central1-a"
   },
   "builders": [
