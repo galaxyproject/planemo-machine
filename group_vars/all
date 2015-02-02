@@ -41,6 +41,7 @@ galaxy_extras_config_proftpd: false
 galaxy_admin_user: "dev@galaxyproject.org"
 
 nginx_proxy_ide: true
+nginx_proxy_reports: false
 nginx_serve_planemo_machine_web: true
 planemo_machine_web_repo: git://github.com/jmchilton/planemo-machine-web.git
 planemo_machine_web_dir: "{{ galaxyFS_base_dir }}/planemo-machine-web"
