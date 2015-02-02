@@ -34,8 +34,8 @@ dev_tool_conf_dir: "{{ galaxyFS_base_dir }}/tools"
 galaxy_ini_path: "{{ galaxy_server_dir }}/config/galaxy.ini"
 galaxy_log_dir: /home/{{ galaxy_user_name }}
 
-# TODO: work on proftpd
 galaxy_extras_install_packages: true
+galaxy_extras_config_proftpd: false
 
 # Auto login this user....
 galaxy_admin_user: "dev@galaxyproject.org"
@@ -50,6 +50,8 @@ supervisor_slurm_config_dir: "/home/{{ galaxy_user_name }}"
 # Disable management/user features for devbox.
 supervisor_manage_reports: false
 supervisor_manage_nodeproxy: false
+supervisor_manage_proftp: false
+
 
 galaxy_config:
   "app:main":
