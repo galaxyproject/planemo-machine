@@ -9,8 +9,7 @@ MAINTAINER John Chilton <jmchilton@gmail.com>
 # Pre-install a bunch of packages to speed up ansible steps.
 RUN apt-get update -y && apt-get install -y software-properties-common && \
     apt-add-repository -y ppa:ansible/ansible && apt-add-repository -y ppa:galaxyproject/nginx && \
-    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9 && \
-    sh -c "echo 'deb https://get.docker.io/ubuntu docker main' > /etc/apt/sources.list.d/docker.list"
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
 RUN apt-get update -y && \
     apt-get install -y ant atop axel bioperl cmake curl g++ gcc gfortran git-core htop iftop iotop \
             ipython libffi-dev liblapack-dev libncurses5-dev libopenblas-dev libpam0g-dev libpq-dev libsparsehash-dev \
@@ -18,7 +17,7 @@ RUN apt-get update -y && \
             python-dev python-prettytable python-psycopg2 rsync slurm-drmaa-dev swig sysstat unzip vim wget zlib1g-dev \
             ansible build-essential git m4 ruby texinfo libbz2-dev libcurl4-openssl-dev libexpat-dev \
             automake fail2ban fuse glusterfs-client libcurl4-openssl-dev libfuse-dev libfuse2 \
-            libpcre3-dev libreadline6-dev libslurm-dev libssl-dev libtool libxml2-dev libmunge-dev lxc-docker \
+            libpcre3-dev libreadline6-dev libslurm-dev libssl-dev libtool libxml2-dev libmunge-dev \
             mime-support munge nfs-common nfs-kernel-server pkg-config postgresql-server-dev-9.3 python-pip python-tk \
             rabbitmq-server slurm-llnl xfsprogs nginx-extras nodejs npm emacs24-nox
 
