@@ -1,4 +1,2 @@
 codebox_path: "/opt/galaxy/codebox"
-codebox_port: 9010
-
-
+codebox_port: 8991
