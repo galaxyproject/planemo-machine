@@ -38,11 +38,11 @@ RUN mkdir /opt/galaxy/db && chown -R postgres:postgres /opt/galaxy/db
 ADD group_vars/all /tmp/ansible/vars.yml
 ADD roles/ /tmp/ansible/roles
 ADD provision.yml /tmp/ansible/provision.yml
-RUN ansible-playbook /tmp/ansible/provision.yml --extra-vars galaxy_user_name=ubuntu --tags=image -c local -e "@vars.yml" && \
-    ansible-playbook /tmp/ansible/provision.yml --extra-vars galaxy_user_name=ubuntu --tags=database -c local -e "@vars.yml" && \
-    ansible-playbook /tmp/ansible/provision.yml --extra-vars galaxy_user_name=ubuntu --tags=galaxy -c local -e "@vars.yml" && \
-    ansible-playbook /tmp/ansible/provision.yml --extra-vars galaxy_user_name=ubuntu --tags=galaxyextras -c local -e "@vars.yml" && \
-    ansible-playbook /tmp/ansible/provision.yml --extra-vars galaxy_user_name=ubuntu --tags=devbox -c local -e "@vars.yml" &&  \
+RUN ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml --extra-vars galaxy_user_name=ubuntu --tags=image -c local -e "@vars.yml" && \
+    ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml --extra-vars galaxy_user_name=ubuntu --tags=database -c local -e "@vars.yml" && \
+    ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml --extra-vars galaxy_user_name=ubuntu --tags=galaxy -c local -e "@vars.yml" && \
+    ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml --extra-vars galaxy_user_name=ubuntu --tags=galaxyextras -c local -e "@vars.yml" && \
+    ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml --extra-vars galaxy_user_name=ubuntu --tags=devbox -c local -e "@vars.yml" &&  \
     sh /tmp/cleanup.sh && \
     apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
