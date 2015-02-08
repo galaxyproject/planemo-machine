@@ -5,6 +5,7 @@
     "docker_export_path":"",
     "docker_pull": true,
     "docker_commit": false,
+    "docker_autostart": true,
     "ami_access_key": "",
     "ami_secret_key": "",
     "ami_region": "us-east-1",
@@ -30,7 +31,7 @@
       "boot_wait": "4s",
       "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "guest_os_type": "Ubuntu_64",
-      "headless": false,
+      "headless": true,
       "http_directory": "http",
       "iso_checksum": "ca2531b8cd79ea5b778ede3a524779b9",
       "iso_checksum_type": "md5",
@@ -142,17 +143,19 @@
       "type": "ansible-local",
       "playbook_file": "provision.yml",
       "role_paths": [
-        "roles/galaxyprojectdotorg.cloudmanimage",
-        "roles/galaxyprojectdotorg.cloudmandatabase",
+        "roles/galaxyprojectdotorg.galaxy-os",
+        "roles/galaxyprojectdotorg.cloudman-database",
         "roles/galaxyprojectdotorg.cloudmantrackster",
         "roles/galaxyprojectdotorg.devbox",
         "roles/galaxyprojectdotorg.galaxy",
-        "roles/galaxyprojectdotorg.galaxyextras",
+        "roles/galaxyprojectdotorg.galaxy-extras",
         "roles/smola.java"
       ],
       "extra_arguments": [
          "--extra-vars",
-         "galaxy_user_name={{ user `username` }}"
+         "galaxy_user_name={{ user `username` }}",
+         "--extra-vars",
+         "supervisor_docker_autostart={{ user `docker_autostart`}}"
       ],
       "group_vars": "group_vars"
     },

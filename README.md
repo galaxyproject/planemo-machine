@@ -11,11 +11,17 @@ Example Uses
 
  * Build Docker image (using packer).
 
-``packer build --only docker packer.json``
+``packer build -var 'docker_autostart=false' --only docker packer.json``
+
+Warning: Packer does not work with Docker 1.4
+(https://github.com/mitchellh/packer/issues/1752). The VM version of this
+build process will enable Docker by default - but when building a Docker image
+we disable this so the developer doesn't need to configure docker-in-docker
+functionality.
 
  * Build Docker image (using packer) based on toolshed base dependencies (much faster).
 
-``packer build -var 'docker_base=toolshed/requirements' --only docker packer.json``
+``packer build  -var 'docker_autostart=false' -var 'docker_base=toolshed/requirements' --only docker packer.json``
 
  * Build a modified variant of the recipes with a docker file directly
      (skipping packer). Skipping packer makes it easier to iterate on and applicable

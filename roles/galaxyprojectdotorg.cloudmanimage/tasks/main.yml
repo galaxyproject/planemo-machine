@@ -1,6 +1,0 @@
----
-#   Build the base dev box (modeled after cloudman role)
-#
-
-- include: packages.yml
-  when: cm_install_packages and not only_cleanup
