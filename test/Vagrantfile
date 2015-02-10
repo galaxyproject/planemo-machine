@@ -6,10 +6,10 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "galaxydev"
+  config.vm.box = "planemo"
 
   # TODO
-  config.vm.box_url = "."
+  config.vm.box_url = "https://images.galaxyproject.org/planemo/latest.box"
 
   # Forward nginx.
   config.vm.network "forwarded_port", guest: 80, host: 8010
