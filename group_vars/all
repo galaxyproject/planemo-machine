@@ -79,6 +79,7 @@ galaxy_config:
     "admin_users": "{{ galaxy_admin_user }}"
     "use_remote_user": "True"
     "watch_tools": "True"
+    "check_migrate_tools": "False"
   "uwsgi":
     "socket": "127.0.0.1:4001"
     "stats": "127.0.0.1:9191"
