@@ -7,10 +7,7 @@ sudo apt-get update -y -qq > /dev/null
 sudo apt-get upgrade -y -qq > /dev/null
 
 # Install necessary libraries for guest additions and Vagrant NFS Share
-sudo apt-get -y -q install linux-headers-$(uname -r) build-essential dkms nfs-common
-
-# Install necessary dependencies
-sudo apt-get -y -q install curl wget
+sudo apt-get -y -q install linux-headers-$(uname -r) build-essential dkms nfs-common xserver-xorg xserver-xorg-core curl wget virtualbox-guest-utils virtualbox-guest-x11 virtualbox-guest-dkms
 
 # Setup sudo to allow no-password sudo for "admin"
 groupadd -r admin
@@ -30,10 +27,7 @@ chown -R vagrant ~vagrant/.ssh
 mkdir /tmp/virtualbox
 VERSION=$(cat /home/vagrant/.vbox_version)
 mount -o loop /home/vagrant/VBoxGuestAdditions_$VERSION.iso /tmp/virtualbox
-# Following line will return a non-zero exit code because
-# X11 extensions cannot be installed. This is fine - so just
-# keep going.
-sh /tmp/virtualbox/VBoxLinuxAdditions.run | true
+sh /tmp/virtualbox/VBoxLinuxAdditions.run --nox11 | true
 umount /tmp/virtualbox
 rmdir /tmp/virtualbox
 rm /home/vagrant/*.iso

@@ -15,5 +15,4 @@ then
     rm -f $VIRTUALBOX_BOX || true
     packer build -only virtualbox-iso -var 'username=vagrant' $PACKER_CONF 
 fi
-vagrant box remove $VAGRANT_NAME || true
-vagrant box add $VAGRANT_NAME $VIRTUALBOX_BOX
+vagrant box add -f $VAGRANT_NAME $VIRTUALBOX_BOX
