@@ -9,8 +9,8 @@ MAINTAINER John Chilton <jmchilton@gmail.com>
 # Pre-install a bunch of packages to speed up ansible steps.
 RUN apt-get update -y && apt-get install -y software-properties-common && \
     apt-add-repository -y ppa:ansible/ansible && apt-add-repository -y ppa:galaxyproject/nginx && \
-    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
-RUN apt-get update -y && \
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9 && \
+    apt-get update -y && \
     apt-get install -y ant atop axel bioperl cmake curl g++ gcc gfortran git-core htop iftop iotop \
             ipython libffi-dev liblapack-dev libncurses5-dev libopenblas-dev libpam0g-dev libpq-dev libsparsehash-dev \
             make mercurial nmon openssh-server patch postgresql postgresql postgresql-client postgresql-plpython-9.3 \
