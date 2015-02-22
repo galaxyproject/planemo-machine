@@ -14,8 +14,8 @@ dev_user_name: "{{ galaxy_user_name }}"
 dev_user_home: "/home/{{ dev_user_name }}"
 dev_user_shellrc: "{{ dev_user_home }}/.bashrc"
 
-galaxy_repo: https://bitbucket.org/galaxy/galaxy-central
-galaxy_changeset_id: default
+galaxy_repo: https://bitbucket.org/jmchilton/galaxy-central-fork-1
+galaxy_changeset_id: 19ab1ca
 
 galaxy_manage_clone: no
 galaxy_manage_download: yes
@@ -78,7 +78,7 @@ galaxy_config:
     "tool_config_file": "config/tool_conf.xml.sample,config/shed_tool_conf.xml,{{ dev_tool_conf }}"
     "admin_users": "{{ galaxy_admin_user }}"
     "use_remote_user": "True"
-    "watch_tools": "True"
+    "watch_tools": "polling"
     "check_migrate_tools": "False"
   "uwsgi":
     "socket": "127.0.0.1:4001"
