@@ -57,7 +57,7 @@
 - name: Install codebox.
   sudo: True
   sudo_user: "{{ galaxy_user_name }}"
-  shell: "mkdir -p {{ codebox_path }} && cd {{ codebox_path }} && npm install codebox"
+  shell: "mkdir -p {{ codebox_path }} && cd {{ codebox_path }} && npm install codebox@{{ codebox_version }}"
 
 - name: Add codebox to supervisor configuration.
   template: src=supervisor.conf.j2 dest=/etc/supervisor/conf.d/codebox.conf
@@ -68,3 +68,7 @@
 - name: Add planemo machine web content
   git: repo={{ planemo_machine_web_repo }} dest={{ planemo_machine_web_dir }} accept_hostkey=yes
   when: nginx_serve_planemo_machine_web
+
+- name: Add small tool conf
+  template: src=tool_conf.small.xml.j2 dest={{ small_tool_conf_path }}
+  when: small_tool_conf
