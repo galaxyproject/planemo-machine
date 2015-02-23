@@ -46,7 +46,7 @@ galaxy_admin_user: "dev@galaxyproject.org"
 # Turn of uwsgi for now - doesn't work with tool reloading.
 galaxy_uwsgi: false
 galaxy_web_processes: 1
-galaxy_handler_processes: 1
+galaxy_handler_processes: 0
 
 # defaults for paste fallbacks
 galaxy_web0_port: 8080
