@@ -53,6 +53,8 @@ galaxy_web0_port: 8080
 galaxy_handler0_port: 9010
 galaxy_web_threadpool_workers: 10
 galaxy_handler_threadpool_workers: 10
+galaxy_docker_enabled: true
+galaxy_docker_volumes_from: false
 
 nginx_proxy_ide: true
 nginx_proxy_reports: false
