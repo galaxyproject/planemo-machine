@@ -14,8 +14,9 @@ dev_user_name: "{{ galaxy_user_name }}"
 dev_user_home: "/home/{{ dev_user_name }}"
 dev_user_shellrc: "{{ dev_user_home }}/.bashrc"
 
-galaxy_repo: https://bitbucket.org/jmchilton/galaxy-central-fork-1
-galaxy_changeset_id: 19ab1ca
+galaxy_vcs: git
+galaxy_git_repo: https://github.com/jmchilton/galaxy.git
+galaxy_changeset_id: release_15.03_docker
 
 galaxy_manage_clone: no
 galaxy_manage_download: yes
