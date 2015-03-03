@@ -85,6 +85,7 @@ galaxy_config:
     "use_remote_user": "True"
     "watch_tools": "polling"
     "check_migrate_tools": "False"
+    "allow_library_path_paste": "True"
   "uwsgi":
     "socket": "127.0.0.1:4001"
     "stats": "127.0.0.1:9191"
