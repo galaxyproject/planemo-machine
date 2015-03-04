@@ -17,6 +17,7 @@ dev_user_shellrc: "{{ dev_user_home }}/.bashrc"
 galaxy_vcs: git
 galaxy_git_repo: https://github.com/jmchilton/galaxy.git
 galaxy_changeset_id: release_15.03_docker
+galaxy_download_url: https://codeload.github.com/jmchilton/galaxy/tar.gz/release_15.03_docker
 
 galaxy_manage_clone: no
 galaxy_manage_download: yes
