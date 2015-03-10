@@ -33,6 +33,9 @@
   sudo_user: "{{ dev_user_name }}"
   shell: "{{ dev_user_home }}/.linuxbrew/bin/brew install -v planemo"
 
+- name: Setup .planemo.yml
+  template: src=planemo.yml.j2 dest={{ dev_user_home }}/.planemo.yml
+
 # TODO: MANPATH, INFOPATH
 - name: Add linuxbrew to dev users PATH
   lineinfile: "dest={{ dev_user_shellrc }} line='export PATH={{ dev_user_home }}/.linuxbrew/bin:$PATH'"
