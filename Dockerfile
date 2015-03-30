@@ -1,8 +1,3 @@
-# A piece-wise version of roughly the packer recipe for Docker, this
-# is much better than packer for interactive debugging, incrementally building
-# the image, etc... but is only for testing. To build final produces ignore
-# this file and use package.json.
-
 FROM toolshed/requirements
 MAINTAINER John Chilton <jmchilton@gmail.com>
 
@@ -30,8 +25,6 @@ RUN sh /tmp/setup_docker.sh
 # Pretasks (somehow should get this into a role for reuse)
 WORKDIR /tmp/ansible
 RUN mkdir /opt/galaxy && mkdir /opt/galaxy/shed_tools && chown -R ubuntu:ubuntu /opt/galaxy
-# Pre-clone Galaxy into its final destination early in Dockerfile so ansible task
-# runs quicker.
 USER root
 ENV USER root
 RUN mkdir /opt/galaxy/db && chown -R postgres:postgres /opt/galaxy/db
@@ -46,5 +39,4 @@ RUN ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provi
     sh /tmp/cleanup.sh && \
     apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-#CMD ["/usr/sbin/service", "supervisor", "start"]
 CMD ["/usr/bin/supervisord", "-n"]
