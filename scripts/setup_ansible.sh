@@ -6,7 +6,7 @@ if [ $? -ne 0 ];
 then
 	sudo apt-get update -y
 	sudo apt-get install -y software-properties-common
-	sudo apt-add-repository -y ppa:ansible/ansible
-	sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/ansible-ansible-trusty.list" -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
-	sudo apt-get install -y ansible
+    sudo apt-get install -y python-dev
+    sudo apt-get install -y python-pip
+    sudo pip install ansible==1.9.0
 fi
