@@ -66,6 +66,7 @@ planemo_machine_web_dir: "{{ galaxyFS_base_dir }}/planemo-machine-web"
 small_tool_conf: true
 small_tool_conf_path: /opt/galaxy/tool_conf.min.xml
 
+galaxy_extras_config_ie_proxy: false
 
 supervisor_postgres_database_path: "{{ galaxy_db_dir }}"
 supervisor_slurm_config_dir: "/home/{{ galaxy_user_name }}"
@@ -88,6 +89,7 @@ galaxy_config:
     "watch_tools": "polling"
     "check_migrate_tools": "False"
     "allow_library_path_paste": "True"
+    "dynamic_proxy_manage": "False"
   "uwsgi":
     "socket": "127.0.0.1:4001"
     "stats": "127.0.0.1:9191"
