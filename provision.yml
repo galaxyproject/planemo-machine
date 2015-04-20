@@ -38,3 +38,7 @@
 #       tags: java
 #       java_packages:
 #         - oracle-java7-installer
+- hosts: localhost
+  connection: local
+  tasks:
+    - file: path=/opt/galaxy/tools state=directory
