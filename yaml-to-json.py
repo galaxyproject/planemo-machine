@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 from __future__ import print_function
 import yaml
 import json
@@ -16,7 +17,8 @@ class UnsortableList(list):
 class UnsortableOrderedDict(OrderedDict):
     def items(self, *args, **kwargs):
         return UnsortableList(OrderedDict.items(self, *args, **kwargs))
-yaml.add_representer(UnsortableOrderedDict, yaml.representer.SafeRepresenter.represent_dict)
+yaml.add_representer(UnsortableOrderedDict, 
+                     yaml.representer.SafeRepresenter.represent_dict)
 
 ## Treat unicode / str as the same things
 
@@ -27,42 +29,12 @@ def construct_unicode(loader, node):
 yaml.add_representer(unicode, represent_unicode)
 yaml.add_constructor("tag:yaml.org,2002:str", construct_unicode)
 
-# Macros for YAML
-
-class IncludeLoader(yaml.Loader):
-    """
-    Custom YAML loader that adds an !include constructor for including
-    other YAML files relative to the current file being parsed.
- 
-    Example:
- 
-        section: !include other/file.yaml
- 
-    """
- 
-    def __init__(self, stream):
-        self._root = os.path.abspath(os.path.split(stream.name)[0])
-        super(IncludeLoader, self).__init__(stream)
- 
-    def include(self, node):
-        path = self.construct_scalar(node)
-        filename = path if path[0] == '/' else os.path.join(self._root, path)
-        with open(filename, 'r') as f:
-            yml_data = yaml.load(f, IncludeLoader)
-            if MACROS in yml_data:
-                del yml_data[MACROS]
-            return yml_data
-
- 
-IncludeLoader.add_constructor('!include', IncludeLoader.include) 
 
 parser = argparse.ArgumentParser(description='Convert YAML to JSON (and vice versa)')
 parser.add_argument('filename', metavar='SOURCEFILE', type=str, help="the file name to be converted. If it ends with '.json' a YAML file will be created. All other file extensions are assumed to by YAML and a JSON file will be created")
 parser.add_argument('--force', action="store_true", default=False, help="overwrite target file, even if it is newer than the source file")
 
-
 args = parser.parse_args()
-
 
 path, ext = os.path.splitext(args.filename)
 
