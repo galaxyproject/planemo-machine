@@ -13,6 +13,6 @@ PACKER_CONF=${PACKER_CONF:-"packer.json"}
 if [ ! -n "$BOX_ONLY" ];
 then
     rm -f $VIRTUALBOX_BOX || true
-    packer build -only virtualbox-iso -var 'username=vagrant' $PACKER_CONF 
+    packer build -only virtualbox-iso $PACKER_CONF 
 fi
 vagrant box add -f $VAGRANT_NAME $VIRTUALBOX_BOX
