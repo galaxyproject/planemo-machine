@@ -31,7 +31,7 @@
       "boot_wait": "4s",
       "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "guest_os_type": "Ubuntu_64",
-      "headless": true,
+      "headless": false,
       "http_directory": "http",
       "iso_checksum": "83aabd8dcf1e8f469f3c72fff2375195",
       "iso_checksum_type": "md5",
@@ -39,7 +39,7 @@
       "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo '{{ user `username` }}'|sudo -S sh 'shutdown.sh'",
       "ssh_password": "vagrant",
       "ssh_port": 22,
-      "ssh_username": "{{ user `username` }}",
+      "ssh_username": "vagrant",
       "ssh_wait_timeout": "10000s",
       "type": "virtualbox-iso",
       "vboxmanage": [
@@ -93,7 +93,7 @@
     {
       "override": {
         "virtualbox-iso": {
-          "execute_command": "echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'"
+          "execute_command": "echo 'vagrant' | sudo -S sh '{{ .Path }}'"
         }
       },
       "scripts": [
@@ -126,7 +126,7 @@
     {
       "override": {
         "virtualbox-iso": {
-          "execute_command": "echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'"
+          "execute_command": "echo 'vagrant' | sudo -S sh '{{ .Path }}'"
         }
       },
       "scripts": [
