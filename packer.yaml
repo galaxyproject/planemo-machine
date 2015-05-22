@@ -16,52 +16,48 @@ variables:
   gce_source_image: ubuntu-1404-trusty-v20150127
   gce_zone: us-central1-a
 
-_macros:
-- &virtualbox-builder
-  # Macro for Builder for VirtualBox OVA
-  - type: virtualbox-iso
-    boot_command:
-    - <esc><esc><enter><wait>
-    - /install/vmlinuz noapic preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg
-      <wait>
-    - debian-installer=en_US auto locale=en_US kbd-chooser/method=us <wait>
-    - hostname={{ .Name }} <wait>
-    - fb=false debconf/frontend=noninteractive <wait>
-    - keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA keyboard-configuration/variant=USA
-      console-setup/ask_detect=false <wait>
-    - initrd=/install/initrd.gz -- <enter><wait>
-    boot_wait: 4s
-    guest_additions_path: VBoxGuestAdditions_{{.Version}}.iso
-    guest_os_type: Ubuntu_64
-    headless: true
-    http_directory: http
-    iso_checksum: 83aabd8dcf1e8f469f3c72fff2375195
-    iso_checksum_type: md5
-    iso_url: http://releases.ubuntu.com/14.04/ubuntu-14.04.2-server-amd64.iso
-    shutdown_command: echo 'shutdown -P now' > shutdown.sh; echo '{{ user `username` }}'|sudo -S sh 'shutdown.sh'
-    ssh_password: vagrant
-    ssh_port: 22
-    ssh_username: '{{ user `username` }}'
-    ssh_wait_timeout: 10000s
-    vboxmanage:
-    - - modifyvm
-      - '{{.Name}}'
-      - --memory
-      - '2048'
-    - - modifyvm
-      - '{{.Name}}'
-      - --cpus
-      - '4'
-    virtualbox_version_file: .vbox_version
-
 builders:
 
-# Builder for plain VirtualBox
-- <<: *virtualbox-builder
+# Builder for VirtualBox OVA
+- &virtualbox-iso
   name: virtualbox-iso
+  type: virtualbox-iso
+  boot_command:
+  - <esc><esc><enter><wait>
+  - /install/vmlinuz noapic preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg
+    <wait>
+  - debian-installer=en_US auto locale=en_US kbd-chooser/method=us <wait>
+  - hostname={{ .Name }} <wait>
+  - fb=false debconf/frontend=noninteractive <wait>
+  - keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA keyboard-configuration/variant=USA
+    console-setup/ask_detect=false <wait>
+  - initrd=/install/initrd.gz -- <enter><wait>
+  boot_wait: 4s
+  guest_additions_path: VBoxGuestAdditions_{{.Version}}.iso
+  guest_os_type: Ubuntu_64
+  headless: true
+  http_directory: http
+  iso_checksum: 83aabd8dcf1e8f469f3c72fff2375195
+  iso_checksum_type: md5
+  iso_url: http://releases.ubuntu.com/14.04/ubuntu-14.04.2-server-amd64.iso
+  shutdown_command: echo 'shutdown -P now' > shutdown.sh; echo '{{ user `username` }}'|sudo -S sh 'shutdown.sh'
+  ssh_password: vagrant
+  ssh_port: 22
+  ssh_username: '{{ user `username` }}'
+  ssh_wait_timeout: 10000s
+  vboxmanage:
+  - - modifyvm
+    - '{{.Name}}'
+    - --memory
+    - '2048'
+  - - modifyvm
+    - '{{.Name}}'
+    - --cpus
+    - '4'
+  virtualbox_version_file: .vbox_version
 
-# Builder for plain VirtualBox
-- <<: *virtualbox-builder
+# Builder for VirtualBox + Vagrant export
+- <<: *virtualbox-iso
   name: virtualbox-iso-vagrant
 
 # Builder for Docker
