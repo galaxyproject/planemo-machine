@@ -137,7 +137,7 @@
     {
       "override": {
         "virtualbox-iso": {
-          "command": "echo '{{ user `username` }}' | ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 sudo -S -E ansible-playbook"
+          "command": "echo 'vagrant' | ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 sudo -S -E ansible-playbook"
         }
       },
       "type": "ansible-local",
@@ -162,7 +162,7 @@
     {
       "override": {
         "virtualbox-iso": {
-          "execute_command": "echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'"
+          "execute_command": "echo 'vagrant' | sudo -S sh '{{ .Path }}'"
         }
       },
       "scripts": [
