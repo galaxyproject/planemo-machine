@@ -1,6 +1,6 @@
 {
   "variables": {
-    "username": "ubuntu",
+    "username": "vagrant",
     "docker_base": "ubuntu:trusty",
     "docker_export_path":"",
     "docker_pull": true,
