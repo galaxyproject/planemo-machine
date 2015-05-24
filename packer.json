@@ -1,12 +1,13 @@
 {
   "variables": {
-    "username": "vagrant", 
+    "username": "ubuntu", 
     "ami_secret_key": "", 
     "gce_account_file": "gce_account.json", 
     "docker_autostart": true, 
     "docker_export_path": "", 
     "gce_source_image": "ubuntu-1404-trusty-v20150127", 
     "ami_region": "us-east-1", 
+    "password": "ubuntu", 
     "ami_access_key": "", 
     "ami_name": "galaxydev {{timestamp}}", 
     "docker_base": "ubuntu:trusty", 
@@ -63,7 +64,7 @@
       "boot_wait": "4s", 
       "http_directory": "http", 
       "headless": true, 
-      "ssh_password": "vagrant", 
+      "ssh_password": "{{ user `password` }}", 
       "ssh_wait_timeout": "10000s", 
       "type": "virtualbox-iso"
     }, 
@@ -104,7 +105,7 @@
       "boot_wait": "4s", 
       "http_directory": "http", 
       "headless": true, 
-      "ssh_password": "vagrant", 
+      "ssh_password": "{{ user `password` }}", 
       "ssh_wait_timeout": "10000s", 
       "type": "virtualbox-iso"
     }, 

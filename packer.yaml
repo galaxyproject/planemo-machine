@@ -1,5 +1,6 @@
 variables:
-  username: vagrant
+  username: ubuntu
+  password: ubuntu
   docker_base: ubuntu:trusty
   docker_export_path: ''
   docker_pull: true
@@ -41,7 +42,7 @@ builders:
   iso_checksum_type: md5
   iso_url: http://releases.ubuntu.com/14.04/ubuntu-14.04.2-server-amd64.iso
   shutdown_command: echo 'shutdown -P now' > shutdown.sh; echo '{{ user `username` }}'|sudo -S sh 'shutdown.sh'
-  ssh_password: vagrant
+  ssh_password: '{{ user `password` }}'
   ssh_port: 22
   ssh_username: '{{ user `username` }}'
   ssh_wait_timeout: 10000s
