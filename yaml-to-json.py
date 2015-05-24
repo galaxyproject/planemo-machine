@@ -58,7 +58,7 @@ if ext == ".json":
         yaml.dump(json_data, target, default_flow_style=False, encoding="utf-8", allow_unicode=True )
 else:
     with open(args.filename, 'r') as source, open(target_filename, "w") as target:
-        yml_data = yaml.load(source, IncludeLoader)
+        yml_data = yaml.load(source)
         if MACROS in yml_data:
             del yml_data[MACROS]
         target.write(json.dumps(yml_data, indent=2))
