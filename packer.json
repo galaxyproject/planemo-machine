@@ -1,174 +1,227 @@
 {
   "variables": {
-    "username": "ubuntu",
-    "docker_base": "ubuntu:trusty",
-    "docker_export_path":"",
-    "docker_pull": true,
-    "docker_commit": false,
-    "docker_autostart": true,
-    "ami_access_key": "",
-    "ami_secret_key": "",
-    "ami_region": "us-east-1",
-    "ami_source": "64e27e0c",
-    "ami_instance_type": "t1.micro",
-    "ami_name": "galaxydev {{timestamp}}",
-    "gce_account_file": "gce_account.json",
-    "gce_project_id": "galaxydev",
-    "gce_source_image": "ubuntu-1404-trusty-v20150127",
-    "gce_zone": "us-central1-a"
-  },
-  "builders": [
-    {
-      "boot_command": [
-        "<esc><esc><enter><wait>",
-        "/install/vmlinuz noapic preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg <wait>",
-        "debian-installer=en_US auto locale=en_US kbd-chooser/method=us <wait>",
-        "hostname={{ .Name }} <wait>",
-        "fb=false debconf/frontend=noninteractive <wait>",
-        "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA keyboard-configuration/variant=USA console-setup/ask_detect=false <wait>",
-        "initrd=/install/initrd.gz -- <enter><wait>"
-      ],
-      "boot_wait": "4s",
-      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
-      "guest_os_type": "Ubuntu_64",
-      "headless": true,
-      "http_directory": "http",
-      "iso_checksum": "83aabd8dcf1e8f469f3c72fff2375195",
-      "iso_checksum_type": "md5",
-      "iso_url": "http://releases.ubuntu.com/14.04/ubuntu-14.04.2-server-amd64.iso",
-      "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo '{{ user `username` }}'|sudo -S sh 'shutdown.sh'",
-      "ssh_password": "vagrant",
-      "ssh_port": 22,
-      "ssh_username": "{{ user `username` }}",
-      "ssh_wait_timeout": "10000s",
-      "type": "virtualbox-iso",
-      "vboxmanage": [
-        [
-          "modifyvm",
-          "{{.Name}}",
-          "--memory",
-          "2048"
-        ],
-        [
-          "modifyvm",
-          "{{.Name}}",
-          "--cpus",
-          "4"
-        ]
-      ],
-      "virtualbox_version_file": ".vbox_version"
-    },
-    {
-      "type": "docker",
-      "image": "{{user `docker_base`}}",
-      "pull": "{{user `docker_pull`}}",
-      "commit": "{{user `docker_commit`}}"
-    },
-    {
-      "type": "amazon-ebs",
-      "access_key": "{{user `ami_access_key`}}",
-      "secret_key": "{{user `ami_secret_key`}}",
-      "region": "{{user `ami_region`}}",
-      "source_ami": "{{user `ami_source`}}",
-      "instance_type": "{{user `ami_instance_type`}}",
-      "ssh_username": "{{user `username`}}",
-      "ami_name": "{{user `ami_name`}}"
-    },
-    {
-      "type": "googlecompute",
-      "account_file": "{{user `gce_account_file`}}",
-      "project_id": "{{user `gce_project_id`}}",
-      "source_image": "{{user `gce_source_image`}}",
-      "zone": "{{user `gce_zone`}}",
-      "image_name": "planemo-machine-{{timestamp}}"
-    }
-  ],
+    "username": "ubuntu", 
+    "ami_secret_key": "", 
+    "gce_account_file": "gce_account.json", 
+    "docker_autostart": true, 
+    "docker_export_path": "", 
+    "gce_source_image": "ubuntu-1404-trusty-v20150127", 
+    "ami_region": "us-east-1", 
+    "password": "ubuntu", 
+    "ami_access_key": "", 
+    "ami_name": "galaxydev {{timestamp}}", 
+    "docker_base": "ubuntu:trusty", 
+    "gce_project_id": "galaxydev", 
+    "ami_instance_type": "t1.micro", 
+    "docker_commit": false, 
+    "gce_zone": "us-central1-a", 
+    "docker_pull": true, 
+    "ami_source": "64e27e0c"
+  }, 
   "post-processors": [
     {
-      "type": "vagrant",
-      "only": ["virtualbox-iso"]
+      "only": [
+        "virtualbox-iso-vagrant"
+      ], 
+      "type": "vagrant"
     }
-  ],
+  ], 
+  "builders": [
+    {
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso", 
+      "iso_url": "http://releases.ubuntu.com/14.04/ubuntu-14.04.2-server-amd64.iso", 
+      "ssh_port": 22, 
+      "ssh_username": "{{ user `username` }}", 
+      "iso_checksum_type": "md5", 
+      "virtualbox_version_file": ".vbox_version", 
+      "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo '{{ user `username` }}'|sudo -S sh 'shutdown.sh'", 
+      "vboxmanage": [
+        [
+          "modifyvm", 
+          "{{.Name}}", 
+          "--memory", 
+          "2048"
+        ], 
+        [
+          "modifyvm", 
+          "{{.Name}}", 
+          "--cpus", 
+          "4"
+        ]
+      ], 
+      "boot_command": [
+        "<esc><esc><enter><wait>", 
+        "/install/vmlinuz noapic preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg <wait>", 
+        "debian-installer=en_US auto locale=en_US kbd-chooser/method=us <wait>", 
+        "hostname={{ .Name }} <wait>", 
+        "fb=false debconf/frontend=noninteractive <wait>", 
+        "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA keyboard-configuration/variant=USA console-setup/ask_detect=false <wait>", 
+        "initrd=/install/initrd.gz -- <enter><wait>"
+      ], 
+      "guest_os_type": "Ubuntu_64", 
+      "name": "virtualbox-iso", 
+      "iso_checksum": "83aabd8dcf1e8f469f3c72fff2375195", 
+      "boot_wait": "4s", 
+      "http_directory": "http", 
+      "headless": true, 
+      "ssh_password": "{{ user `password` }}", 
+      "ssh_wait_timeout": "10000s", 
+      "type": "virtualbox-iso"
+    }, 
+    {
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso", 
+      "iso_url": "http://releases.ubuntu.com/14.04/ubuntu-14.04.2-server-amd64.iso", 
+      "ssh_port": 22, 
+      "ssh_username": "{{ user `username` }}", 
+      "iso_checksum_type": "md5", 
+      "virtualbox_version_file": ".vbox_version", 
+      "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo '{{ user `username` }}'|sudo -S sh 'shutdown.sh'", 
+      "vboxmanage": [
+        [
+          "modifyvm", 
+          "{{.Name}}", 
+          "--memory", 
+          "2048"
+        ], 
+        [
+          "modifyvm", 
+          "{{.Name}}", 
+          "--cpus", 
+          "4"
+        ]
+      ], 
+      "boot_command": [
+        "<esc><esc><enter><wait>", 
+        "/install/vmlinuz noapic preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg <wait>", 
+        "debian-installer=en_US auto locale=en_US kbd-chooser/method=us <wait>", 
+        "hostname={{ .Name }} <wait>", 
+        "fb=false debconf/frontend=noninteractive <wait>", 
+        "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA keyboard-configuration/variant=USA console-setup/ask_detect=false <wait>", 
+        "initrd=/install/initrd.gz -- <enter><wait>"
+      ], 
+      "guest_os_type": "Ubuntu_64", 
+      "name": "virtualbox-iso-vagrant", 
+      "iso_checksum": "83aabd8dcf1e8f469f3c72fff2375195", 
+      "boot_wait": "4s", 
+      "http_directory": "http", 
+      "headless": true, 
+      "ssh_password": "{{ user `password` }}", 
+      "ssh_wait_timeout": "10000s", 
+      "type": "virtualbox-iso"
+    }, 
+    {
+      "pull": "{{user `docker_pull`}}", 
+      "image": "{{user `docker_base`}}", 
+      "type": "docker", 
+      "commit": "{{user `docker_commit`}}"
+    }, 
+    {
+      "access_key": "{{user `ami_access_key`}}", 
+      "source_ami": "{{user `ami_source`}}", 
+      "ssh_username": "{{user `username`}}", 
+      "region": "{{user `ami_region`}}", 
+      "ami_name": "{{user `ami_name`}}", 
+      "instance_type": "{{user `ami_instance_type`}}", 
+      "secret_key": "{{user `ami_secret_key`}}", 
+      "type": "amazon-ebs"
+    }, 
+    {
+      "zone": "{{user `gce_zone`}}", 
+      "project_id": "{{user `gce_project_id`}}", 
+      "type": "googlecompute", 
+      "image_name": "planemo-machine-{{timestamp}}", 
+      "account_file": "{{user `gce_account_file`}}", 
+      "source_image": "{{user `gce_source_image`}}"
+    }
+  ], 
   "provisioners": [
     {
       "override": {
         "virtualbox-iso": {
           "execute_command": "echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'"
         }
-      },
+      }, 
+      "only": [
+        "virtualbox-iso"
+      ], 
+      "type": "shell", 
       "scripts": [
         "scripts/setup_vagrant.sh"
-      ],
-      "type": "shell",
-      "only": ["virtualbox-iso"]
-    },
+      ]
+    }, 
     {
+      "only": [
+        "docker"
+      ], 
+      "type": "shell", 
       "scripts": [
         "scripts/setup_docker.sh"
-      ],
-      "type": "shell",
-      "only": ["docker"]
-    },
+      ]
+    }, 
     {
+      "only": [
+        "amazon-ebs"
+      ], 
+      "type": "shell", 
       "scripts": [
         "scripts/setup_amazon.sh"
-      ],
-      "type": "shell",
-      "only": ["amazon-ebs"]
-    },
+      ]
+    }, 
     {
+      "only": [
+        "googlecompute"
+      ], 
+      "type": "shell", 
       "scripts": [
         "scripts/setup_gce.sh"
-      ],
-      "type": "shell",
-      "only": ["googlecompute"]
-    },
+      ]
+    }, 
     {
       "override": {
         "virtualbox-iso": {
           "execute_command": "echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'"
         }
-      },
+      }, 
+      "type": "shell", 
       "scripts": [
         "scripts/setup_ansible.sh"
-      ],
-      "type": "shell"
-    },
+      ]
+    }, 
     {
+      "extra_arguments": [
+        "--extra-vars", 
+        "galaxy_user_name={{ user `username` }}", 
+        "--extra-vars", 
+        "supervisor_docker_autostart={{ user `docker_autostart`}}"
+      ], 
+      "role_paths": [
+        "roles/galaxyprojectdotorg.galaxy-os", 
+        "roles/galaxyprojectdotorg.cloudman-database", 
+        "roles/galaxyprojectdotorg.cloudmantrackster", 
+        "roles/galaxyprojectdotorg.devbox", 
+        "roles/galaxyprojectdotorg.galaxy", 
+        "roles/galaxyprojectdotorg.galaxy-extras", 
+        "roles/smola.java"
+      ], 
       "override": {
         "virtualbox-iso": {
           "command": "echo '{{ user `username` }}' | ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 sudo -S -E ansible-playbook"
         }
-      },
-      "type": "ansible-local",
-      "playbook_file": "provision.yml",
-      "role_paths": [
-        "roles/galaxyprojectdotorg.galaxy-os",
-        "roles/galaxyprojectdotorg.cloudman-database",
-        "roles/galaxyprojectdotorg.cloudmantrackster",
-        "roles/galaxyprojectdotorg.devbox",
-        "roles/galaxyprojectdotorg.galaxy",
-        "roles/galaxyprojectdotorg.galaxy-extras",
-        "roles/smola.java"
-      ],
-      "extra_arguments": [
-         "--extra-vars",
-         "galaxy_user_name={{ user `username` }}",
-         "--extra-vars",
-         "supervisor_docker_autostart={{ user `docker_autostart`}}"
-      ],
+      }, 
+      "type": "ansible-local", 
+      "playbook_file": "provision.yml", 
       "group_vars": "group_vars"
-    },
+    }, 
     {
       "override": {
         "virtualbox-iso": {
           "execute_command": "echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'"
         }
-      },
+      }, 
+      "type": "shell", 
       "scripts": [
         "scripts/cleanup.sh"
-      ],
-      "type": "shell"
+      ]
     }
   ]
 }

@@ -2,6 +2,9 @@
 
 set -e
 
+username="ubuntu"
+user_home_dir="/home/${username}"
+
 # Updating and Upgrading dependencies
 sudo apt-get update -y -qq > /dev/null
 sudo apt-get upgrade -y -qq > /dev/null
@@ -11,23 +14,24 @@ sudo apt-get -y -q install linux-headers-$(uname -r) build-essential dkms nfs-co
 
 # Setup sudo to allow no-password sudo for "admin"
 groupadd -r admin
-usermod -a -G admin vagrant
+usermod -a -G admin "$username"
+
 cp /etc/sudoers /etc/sudoers.orig
 sed -i -e '/Defaults\s\+env_reset/a Defaults\texempt_group=admin' /etc/sudoers
 sed -i -e 's/%admin ALL=(ALL) ALL/%admin ALL=NOPASSWD:ALL/g' /etc/sudoers
 
 # Installing vagrant keys
-mkdir ~vagrant/.ssh
-chmod 700 ~vagrant/.ssh
-cd ~vagrant/.ssh
+mkdir "${user_home_dir}/.ssh"
+chmod 700 "${user_home_dir}/.ssh"
+cd "${user_home_dir}/.ssh"
 wget --no-check-certificate 'https://raw.github.com/mitchellh/vagrant/master/keys/vagrant.pub' -O authorized_keys
-chmod 600 ~vagrant/.ssh/authorized_keys
-chown -R vagrant ~vagrant/.ssh
+chmod 600 "${user_home_dir}/.ssh/authorized_keys"
+chown -R "$username" "${user_home_dir}/.ssh"
 
 mkdir /tmp/virtualbox
-VERSION=$(cat /home/vagrant/.vbox_version)
-mount -o loop /home/vagrant/VBoxGuestAdditions_$VERSION.iso /tmp/virtualbox
+VERSION=$(cat ${user_home_dir}/.vbox_version)
+mount -o loop ${user_home_dir}/VBoxGuestAdditions_$VERSION.iso /tmp/virtualbox
 sh /tmp/virtualbox/VBoxLinuxAdditions.run --nox11 | true
 umount /tmp/virtualbox
 rmdir /tmp/virtualbox
-rm /home/vagrant/*.iso
+rm ${user_home_dir}/*.iso

@@ -1,0 +1,148 @@
+variables:
+  username: ubuntu
+  password: ubuntu
+  docker_base: ubuntu:trusty
+  docker_export_path: ''
+  docker_pull: true
+  docker_commit: false
+  docker_autostart: true
+  ami_access_key: ''
+  ami_secret_key: ''
+  ami_region: us-east-1
+  ami_source: 64e27e0c
+  ami_instance_type: t1.micro
+  ami_name: galaxydev {{timestamp}}
+  gce_account_file: gce_account.json
+  gce_project_id: galaxydev
+  gce_source_image: ubuntu-1404-trusty-v20150127
+  gce_zone: us-central1-a
+
+builders:
+
+# Builder for VirtualBox OVA
+- &virtualbox-iso
+  name: virtualbox-iso
+  type: virtualbox-iso
+  boot_command:
+  - <esc><esc><enter><wait>
+  - /install/vmlinuz noapic preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg
+    <wait>
+  - debian-installer=en_US auto locale=en_US kbd-chooser/method=us <wait>
+  - hostname={{ .Name }} <wait>
+  - fb=false debconf/frontend=noninteractive <wait>
+  - keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA keyboard-configuration/variant=USA
+    console-setup/ask_detect=false <wait>
+  - initrd=/install/initrd.gz -- <enter><wait>
+  boot_wait: 4s
+  guest_additions_path: VBoxGuestAdditions_{{.Version}}.iso
+  guest_os_type: Ubuntu_64
+  headless: true
+  http_directory: http
+  iso_checksum: 83aabd8dcf1e8f469f3c72fff2375195
+  iso_checksum_type: md5
+  iso_url: http://releases.ubuntu.com/14.04/ubuntu-14.04.2-server-amd64.iso
+  shutdown_command: echo 'shutdown -P now' > shutdown.sh; echo '{{ user `username` }}'|sudo -S sh 'shutdown.sh'
+  ssh_password: '{{ user `password` }}'
+  ssh_port: 22
+  ssh_username: '{{ user `username` }}'
+  ssh_wait_timeout: 10000s
+  vboxmanage:
+  - - modifyvm
+    - '{{.Name}}'
+    - --memory
+    - '2048'
+  - - modifyvm
+    - '{{.Name}}'
+    - --cpus
+    - '4'
+  virtualbox_version_file: .vbox_version
+
+# Builder for VirtualBox + Vagrant export
+- <<: *virtualbox-iso
+  name: virtualbox-iso-vagrant
+
+# Builder for Docker
+- type: docker
+  image: '{{user `docker_base`}}'
+  pull: '{{user `docker_pull`}}'
+  commit: '{{user `docker_commit`}}'
+
+# Builder for AWS
+- type: amazon-ebs
+  access_key: '{{user `ami_access_key`}}'
+  secret_key: '{{user `ami_secret_key`}}'
+  region: '{{user `ami_region`}}'
+  source_ami: '{{user `ami_source`}}'
+  instance_type: '{{user `ami_instance_type`}}'
+  ssh_username: '{{user `username`}}'
+  ami_name: '{{user `ami_name`}}'
+
+# Builder for GCE
+- type: googlecompute
+  account_file: '{{user `gce_account_file`}}'
+  project_id: '{{user `gce_project_id`}}'
+  source_image: '{{user `gce_source_image`}}'
+  zone: '{{user `gce_zone`}}'
+  image_name: planemo-machine-{{timestamp}}
+
+post-processors:
+- type: vagrant
+  only:
+  - virtualbox-iso-vagrant
+
+provisioners:
+- override:
+    virtualbox-iso:
+      execute_command: echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'
+  scripts:
+  - scripts/setup_vagrant.sh
+  type: shell
+  only:
+  - virtualbox-iso
+- scripts:
+  - scripts/setup_docker.sh
+  type: shell
+  only:
+  - docker
+- scripts:
+  - scripts/setup_amazon.sh
+  type: shell
+  only:
+  - amazon-ebs
+- scripts:
+  - scripts/setup_gce.sh
+  type: shell
+  only:
+  - googlecompute
+- override:
+    virtualbox-iso:
+      execute_command: echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'
+  scripts:
+  - scripts/setup_ansible.sh
+  type: shell
+- override:
+    virtualbox-iso:
+      command: echo '{{ user `username` }}' | ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1
+        sudo -S -E ansible-playbook
+  type: ansible-local
+  playbook_file: provision.yml
+  role_paths:
+  - roles/galaxyprojectdotorg.galaxy-os
+  - roles/galaxyprojectdotorg.cloudman-database
+  - roles/galaxyprojectdotorg.cloudmantrackster
+  - roles/galaxyprojectdotorg.devbox
+  - roles/galaxyprojectdotorg.galaxy
+  - roles/galaxyprojectdotorg.galaxy-extras
+  - roles/smola.java
+  extra_arguments:
+  - --extra-vars
+  - galaxy_user_name={{ user `username` }}
+  - --extra-vars
+  - supervisor_docker_autostart={{ user `docker_autostart`}}
+  group_vars: group_vars
+- override:
+    virtualbox-iso:
+      execute_command: echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'
+  scripts:
+  - scripts/cleanup.sh
+  type: shell
