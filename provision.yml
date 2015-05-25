@@ -41,4 +41,4 @@
 - hosts: localhost
   connection: local
   tasks:
-    - file: path=/opt/galaxy/tools state=directory
+    - file: path=/opt/galaxy/tools state=directory owner=ubuntu
