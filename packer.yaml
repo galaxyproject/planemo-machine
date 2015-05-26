@@ -94,6 +94,8 @@ provisioners:
 - override:
     virtualbox-iso:
       execute_command: echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'
+    virtualbox-iso-vagrant:
+      execute_command: echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'
   scripts:
   - scripts/setup_vagrant.sh
   type: shell

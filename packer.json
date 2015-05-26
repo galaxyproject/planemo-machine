@@ -137,6 +137,9 @@
   "provisioners": [
     {
       "override": {
+        "virtualbox-iso-vagrant": {
+          "execute_command": "echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'"
+        }, 
         "virtualbox-iso": {
           "execute_command": "echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'"
         }
