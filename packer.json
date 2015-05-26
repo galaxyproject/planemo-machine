@@ -145,7 +145,8 @@
         }
       }, 
       "only": [
-        "virtualbox-iso"
+        "virtualbox-iso", 
+        "virtualbox-iso-vagrant"
       ], 
       "type": "shell", 
       "scripts": [
@@ -181,10 +182,17 @@
     }, 
     {
       "override": {
+        "virtualbox-iso-vagrant": {
+          "execute_command": "echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'"
+        }, 
         "virtualbox-iso": {
           "execute_command": "echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'"
         }
       }, 
+      "only": [
+        "virtualbox-iso", 
+        "virtualbox-iso-vagrant"
+      ], 
       "type": "shell", 
       "scripts": [
         "scripts/setup_ansible.sh"
@@ -207,6 +215,9 @@
         "roles/smola.java"
       ], 
       "override": {
+        "virtualbox-iso-vagrant": {
+          "command": "echo '{{ user `username` }}' | ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 sudo -S -E ansible-playbook"
+        }, 
         "virtualbox-iso": {
           "command": "echo '{{ user `username` }}' | ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 sudo -S -E ansible-playbook"
         }
@@ -217,10 +228,17 @@
     }, 
     {
       "override": {
+        "virtualbox-iso-vagrant": {
+          "execute_command": "echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'"
+        }, 
         "virtualbox-iso": {
           "execute_command": "echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'"
         }
       }, 
+      "only": [
+        "virtualbox-iso", 
+        "virtualbox-iso-vagrant"
+      ], 
       "type": "shell", 
       "scripts": [
         "scripts/cleanup.sh"

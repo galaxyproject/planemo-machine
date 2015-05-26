@@ -91,7 +91,8 @@ post-processors:
   - virtualbox-iso-vagrant
 
 provisioners:
-- override:
+- &override-virtualbox
+  override:
     virtualbox-iso:
       execute_command: echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'
     virtualbox-iso-vagrant:
@@ -101,6 +102,7 @@ provisioners:
   type: shell
   only:
   - virtualbox-iso
+  - virtualbox-iso-vagrant
 - scripts:
   - scripts/setup_docker.sh
   type: shell
@@ -116,16 +118,17 @@ provisioners:
   type: shell
   only:
   - googlecompute
-- override:
-    virtualbox-iso:
-      execute_command: echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'
+- <<: *override-virtualbox
   scripts:
   - scripts/setup_ansible.sh
   type: shell
 - override:
     virtualbox-iso:
+      &virtualbox-ansible-command
       command: echo '{{ user `username` }}' | ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1
         sudo -S -E ansible-playbook
+    virtualbox-iso-vagrant:
+      <<: *virtualbox-ansible-command
   type: ansible-local
   playbook_file: provision.yml
   role_paths:
@@ -142,9 +145,7 @@ provisioners:
   - --extra-vars
   - supervisor_docker_autostart={{ user `docker_autostart`}}
   group_vars: group_vars
-- override:
-    virtualbox-iso:
-      execute_command: echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'
+- <<: *override-virtualbox
   scripts:
   - scripts/cleanup.sh
   type: shell
