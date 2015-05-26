@@ -74,7 +74,7 @@ supervisor_slurm_config_dir: "/home/{{ galaxy_user_name }}"
 supervisor_manage_reports: false
 supervisor_manage_nodeproxy: false
 supervisor_manage_proftp: false
-
+supervisor_manage_docker: false
 
 galaxy_config:
   "app:main":
