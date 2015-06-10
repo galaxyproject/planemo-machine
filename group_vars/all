@@ -58,6 +58,8 @@ galaxy_handler_threadpool_workers: 10
 galaxy_docker_enabled: true
 galaxy_docker_volumes_from: ""
 
+galaxy_master_api_key: HSNiugRFvgT574F43jZ7N9F3
+
 nginx_proxy_ide: true
 nginx_proxy_reports: false
 nginx_serve_planemo_machine_web: true
@@ -90,6 +92,7 @@ galaxy_config:
     "check_migrate_tools": "False"
     "allow_library_path_paste": "True"
     "dynamic_proxy_manage": "False"
+    "master_api_key": "{{ galaxy_master_api_key }}"
   "uwsgi":
     "socket": "127.0.0.1:4001"
     "stats": "127.0.0.1:9191"
