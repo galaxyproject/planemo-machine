@@ -91,8 +91,8 @@ post-processors:
   - virtualbox-iso-vagrant
 
 provisioners:
-- &override-virtualbox
-  override:
+- override:
+    &override-virtualbox
     virtualbox-iso:
       execute_command: echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'
     virtualbox-iso-vagrant:
@@ -118,10 +118,11 @@ provisioners:
   type: shell
   only:
   - googlecompute
-- <<: *override-virtualbox
-  scripts:
+- scripts:
   - scripts/setup_ansible.sh
   type: shell
+  overrride:
+    <<: *override-virtualbox
 - override:
     virtualbox-iso:
       &virtualbox-ansible-command
@@ -145,7 +146,8 @@ provisioners:
   - --extra-vars
   - supervisor_docker_autostart={{ user `docker_autostart`}}
   group_vars: group_vars
-- <<: *override-virtualbox
-  scripts:
+- scripts:
   - scripts/cleanup.sh
   type: shell
+  override:
+    <<: *override-virtualbox

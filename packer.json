@@ -181,22 +181,18 @@
       ]
     }, 
     {
-      "override": {
+      "scripts": [
+        "scripts/setup_ansible.sh"
+      ], 
+      "type": "shell", 
+      "overrride": {
         "virtualbox-iso-vagrant": {
           "execute_command": "echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'"
         }, 
         "virtualbox-iso": {
           "execute_command": "echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'"
         }
-      }, 
-      "only": [
-        "virtualbox-iso", 
-        "virtualbox-iso-vagrant"
-      ], 
-      "type": "shell", 
-      "scripts": [
-        "scripts/setup_ansible.sh"
-      ]
+      }
     }, 
     {
       "extra_arguments": [
@@ -235,10 +231,6 @@
           "execute_command": "echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'"
         }
       }, 
-      "only": [
-        "virtualbox-iso", 
-        "virtualbox-iso-vagrant"
-      ], 
       "type": "shell", 
       "scripts": [
         "scripts/cleanup.sh"

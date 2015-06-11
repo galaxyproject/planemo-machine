@@ -78,6 +78,7 @@ supervisor_manage_nodeproxy: false
 supervisor_manage_proftp: false
 supervisor_manage_docker: false
 
+
 galaxy_config:
   "app:main":
     "database_connection": "postgres://{{ galaxy_user_name }}@localhost:{{ galaxy_db_port }}/galaxy"
