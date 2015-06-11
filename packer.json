@@ -181,18 +181,18 @@
       ]
     }, 
     {
-      "scripts": [
-        "scripts/setup_ansible.sh"
-      ], 
-      "type": "shell", 
-      "overrride": {
+      "override": {
         "virtualbox-iso-vagrant": {
           "execute_command": "echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'"
         }, 
         "virtualbox-iso": {
           "execute_command": "echo '{{ user `username` }}' | sudo -S sh '{{ .Path }}'"
         }
-      }
+      }, 
+      "type": "shell", 
+      "scripts": [
+        "scripts/setup_ansible.sh"
+      ]
     }, 
     {
       "extra_arguments": [

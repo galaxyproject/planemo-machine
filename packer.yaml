@@ -121,7 +121,7 @@ provisioners:
 - scripts:
   - scripts/setup_ansible.sh
   type: shell
-  overrride:
+  override:
     <<: *override-virtualbox
 - override:
     virtualbox-iso:
