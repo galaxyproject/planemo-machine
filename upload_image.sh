@@ -5,7 +5,7 @@ then
 else
     key_args=""
 fi
-BOX=${BOX:-packer_virtualbox-iso_virtualbox.box}
+BOX=${BOX:-packer_virtualbox-iso-vagrant_virtualbox.box}
 REMOTE_ROOT=${REMOTE_ROOT:-/srv/nginx/images.galaxyproject.org/root}
 SUFFIX=${SUFFIX:-""}
 NAME=$time$SUFFIX.box
