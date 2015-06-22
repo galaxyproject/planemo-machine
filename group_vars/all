@@ -16,8 +16,8 @@ dev_user_shellrc: "{{ dev_user_home }}/.bashrc"
 
 galaxy_vcs: git
 galaxy_git_repo: https://github.com/jmchilton/galaxy.git
-galaxy_changeset_id: release_15.03_docker
-galaxy_download_url: https://codeload.github.com/jmchilton/galaxy/tar.gz/release_15.03_docker
+galaxy_changeset_id: release_15.05_docker
+galaxy_download_url: https://codeload.github.com/jmchilton/galaxy/tar.gz/release_15.05_docker
 
 galaxy_manage_clone: no
 galaxy_manage_download: yes
@@ -77,11 +77,31 @@ supervisor_manage_reports: false
 supervisor_manage_nodeproxy: false
 supervisor_manage_proftp: false
 supervisor_manage_docker: false
+supervisor_manage_toolshed: true
 
 galaxy_database_connection: "postgres://{{ galaxy_user_name }}@localhost:{{ galaxy_db_port }}/galaxy"
+manage_shed_db: true
 
 startup_export_user_files: false
 startup_chown_on_directory: true
+
+galaxy_toolshed_server_dir: "{{ galaxy_server_dir }}"
+galaxy_toolshed_manage_database: true
+
+galaxy_toolshed_bootstrap: yes
+galaxy_toolshed_bootstrap_username: planemo
+galaxy_toolshed_bootstrap_password: planemo
+galaxy_toolshed_bootstrap_email: planemo@test.com
+
+galaxy_toolshed_config:
+  "app:main":
+    "database_connection": "postgres://{{ galaxy_user_name }}@localhost:{{ galaxy_db_port }}/toolshed"
+    "admin_users": "{{ galaxy_toolshed_bootstrap_email }}"
+  "server:main":
+    "use": "egg:Paste#http"
+    "port": "9009"
+    "use_threadpool": "True"
+    "threadpool_workers": "{{ galaxy_web_threadpool_workers }}"
 
 galaxy_config:
   "app:main":

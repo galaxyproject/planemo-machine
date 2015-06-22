@@ -32,6 +32,8 @@
         tags: galaxyextras
       - role: galaxyprojectdotorg.devbox
         tags: devbox
+      - role: galaxyprojectdotorg.galaxy_toolshed
+        tags: toolshed
 #     - role: galaxyprojectdotorg.cloudmantrackster
 #       tags: cloudmantrackster
 #     - role: smola.java

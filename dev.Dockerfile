@@ -40,6 +40,11 @@ RUN ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provi
 RUN ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml $ANSIBLE_EXTRA_VARS --tags=database -c local -e "@vars.yml" && \
     ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml $ANSIBLE_EXTRA_VARS --tags=galaxy -c local -e "@vars.yml"
 
+# Database creation and migration need to happen in the same step so
+# that postgres is still running.
+RUN ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml $ANSIBLE_EXTRA_VARS --tags=database -c local -e "@vars.yml" && \
+    ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml $ANSIBLE_EXTRA_VARS --tags=toolshed -c local -e "@vars.yml"
+
 RUN ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml $ANSIBLE_EXTRA_VARS --tags=galaxyextras -c local -e "@vars.yml"
 RUN ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml $ANSIBLE_EXTRA_VARS --tags=devbox -c local -e "@vars.yml"
 ADD scripts/cleanup.sh /tmp/cleanup.sh
