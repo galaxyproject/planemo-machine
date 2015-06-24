@@ -18,10 +18,24 @@
     - python-dev
     - cmake
 
+- name: Install the debs (X11 environment)
+  sudo: True
+  apt: name={{ item }} state=latest update_cache=yes
+  with_items:
+    - kate
+    - gedit
+    - xubuntu-desktop
+  when: galaxy_devbox_include_x
+
 - name: Install linuxbrew
   sudo: True
   sudo_user: "{{ dev_user_name }}"
   shell: "ruby -e \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/linuxbrew/go/install)\""
+
+- name: Install vim extras
+  sudo: True
+  sudo_user: "{{ dev_user_name }}"
+  shell: "curl http://j.mp/spf13-vim3 -L -o - | sh"
 
 - name: Tap galaxyproject recipes
   sudo: True
