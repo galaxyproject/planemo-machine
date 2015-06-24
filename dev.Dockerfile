@@ -32,6 +32,7 @@ ENV USER root
 RUN mkdir /opt/galaxy/db &&  chown -R postgres:postgres /opt/galaxy/db
 ADD group_vars/all /tmp/ansible/vars.yml
 ADD roles/ /tmp/ansible/roles
+ADD templates/ /tmp/ansible/templates
 ADD provision.yml /tmp/ansible/provision.yml
 ENV ANSIBLE_EXTRA_VARS="--extra-vars galaxy_user_name=ubuntu --extra-vars galaxy_docker_sudo=true --extra-vars docker_package=lxc-docker-1.4.1 --extra-vars startup_chown_on_directory=/opt/galaxy/tools"
 RUN ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml $ANSIBLE_EXTRA_VARS --tags=image -c local -e "@vars.yml"
@@ -49,5 +50,8 @@ RUN ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provi
 RUN ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml $ANSIBLE_EXTRA_VARS --tags=devbox -c local -e "@vars.yml"
 ADD scripts/cleanup.sh /tmp/cleanup.sh
 RUN sh /tmp/cleanup.sh
+
+EXPOSE 80
+EXPOSE 9009
 
 CMD ["/usr/bin/supervisord", "-n"]
