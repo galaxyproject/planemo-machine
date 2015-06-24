@@ -15,6 +15,7 @@ sudo apt-get -y -q install linux-headers-$(uname -r) build-essential dkms nfs-co
 # Setup sudo to allow no-password sudo for "admin"
 groupadd -r admin
 usermod -a -G admin "$username"
+usermod -a -G admin root
 
 cp /etc/sudoers /etc/sudoers.orig
 sed -i -e '/Defaults\s\+env_reset/a Defaults\texempt_group=admin' /etc/sudoers

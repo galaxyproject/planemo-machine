@@ -16,6 +16,7 @@ variables:
   gce_project_id: galaxydev
   gce_source_image: ubuntu-1404-trusty-v20150127
   gce_zone: us-central1-a
+  include_x: false
 
 builders:
 
@@ -132,12 +133,14 @@ provisioners:
       <<: *virtualbox-ansible-command
   type: ansible-local
   playbook_file: provision.yml
+  playbook_dir: playbook
   role_paths:
   - roles/galaxyprojectdotorg.galaxy-os
   - roles/galaxyprojectdotorg.cloudman-database
   - roles/galaxyprojectdotorg.cloudmantrackster
   - roles/galaxyprojectdotorg.devbox
   - roles/galaxyprojectdotorg.galaxy
+  - roles/galaxyprojectdotorg.galaxy_toolshed
   - roles/galaxyprojectdotorg.galaxy-extras
   - roles/smola.java
   extra_arguments:
@@ -145,6 +148,8 @@ provisioners:
   - galaxy_user_name={{ user `username` }}
   - --extra-vars
   - supervisor_docker_autostart={{ user `docker_autostart`}}
+  - --extra-vars
+  - galaxy_devbox_include_x={{ user `include_x`}}
   group_vars: group_vars
 - scripts:
   - scripts/cleanup.sh

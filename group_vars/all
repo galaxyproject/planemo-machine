@@ -16,8 +16,8 @@ dev_user_shellrc: "{{ dev_user_home }}/.bashrc"
 
 galaxy_vcs: git
 galaxy_git_repo: https://github.com/jmchilton/galaxy.git
-galaxy_changeset_id: release_15.03_docker
-galaxy_download_url: https://codeload.github.com/jmchilton/galaxy/tar.gz/release_15.03_docker
+galaxy_changeset_id: release_15.05_docker
+galaxy_download_url: https://codeload.github.com/jmchilton/galaxy/tar.gz/release_15.05_docker
 
 galaxy_manage_clone: no
 galaxy_manage_download: yes
@@ -28,7 +28,8 @@ galaxy_db_port: 5930
 galaxy_db_log: /tmp/pSQL.log
 psql_galaxyftp_password: devboxpass
 
-galaxy_config_file: "{{ galaxy_server_dir }}/config/galaxy.ini"
+galaxy_config_dir: "{{ galaxy_server_dir }}/config"
+galaxy_config_file: "{{ galaxy_config_dir }}/galaxy.ini"
 postgresql_bin_dir: /usr/lib/postgresql/9.3/bin
 
 galaxy_shed_tools_dir: "{{ galaxyFS_base_dir }}/shed_tools"
@@ -49,6 +50,12 @@ galaxy_admin_user: "dev@galaxyproject.org"
 galaxy_uwsgi: false
 galaxy_web_processes: 1
 galaxy_handler_processes: 0
+
+manage_toolshed: true
+
+galaxy_config_files:
+  - src: templates/tool_sheds_conf.xml.j2
+    dest: "{{ galaxy_config['app:main']['tool_sheds_config_file'] }}"
 
 # defaults for paste fallbacks
 galaxy_web0_port: 8080
@@ -77,8 +84,32 @@ supervisor_manage_reports: false
 supervisor_manage_nodeproxy: false
 supervisor_manage_proftp: false
 supervisor_manage_docker: false
+supervisor_manage_toolshed: "{{ manage_toolshed }}"
 
+galaxy_database_connection: "postgres://{{ galaxy_user_name }}@localhost:{{ galaxy_db_port }}/galaxy"
+manage_shed_db: "{{ manage_toolshed }}"
 
+startup_export_user_files: false
+startup_chown_on_directory: ""
+
+galaxy_toolshed_server_dir: "{{ galaxy_server_dir }}"
+galaxy_toolshed_manage_database: true
+
+galaxy_toolshed_bootstrap: yes
+galaxy_toolshed_bootstrap_username: planemo
+galaxy_toolshed_bootstrap_password: planemo
+galaxy_toolshed_bootstrap_email: planemo@test.com
+
+galaxy_toolshed_config:
+  "app:main":
+    "database_connection": "postgres://{{ galaxy_user_name }}@localhost:{{ galaxy_db_port }}/toolshed"
+    "admin_users": "{{ galaxy_toolshed_bootstrap_email }}"
+  "server:main":
+    "use": "egg:Paste#http"
+    "port": "9009"
+    "use_threadpool": "True"
+    "threadpool_workers": "{{ galaxy_web_threadpool_workers }}"
+    "host": "0.0.0.0"
 galaxy_config:
   "app:main":
     "database_connection": "postgres://{{ galaxy_user_name }}@localhost:{{ galaxy_db_port }}/galaxy"
@@ -94,6 +125,7 @@ galaxy_config:
     "allow_library_path_paste": "True"
     "dynamic_proxy_manage": "False"
     "master_api_key": "{{ galaxy_master_api_key }}"
+    "tool_sheds_config_file": "{{ galaxy_config_dir }}/tool_sheds_conf.xml"
   "uwsgi":
     "socket": "127.0.0.1:4001"
     "stats": "127.0.0.1:9191"

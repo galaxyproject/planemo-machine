@@ -11,6 +11,7 @@
     "ami_access_key": "", 
     "ami_name": "galaxydev {{timestamp}}", 
     "docker_base": "ubuntu:trusty", 
+    "include_x": false, 
     "gce_project_id": "galaxydev", 
     "ami_instance_type": "t1.micro", 
     "docker_commit": false, 
@@ -195,11 +196,14 @@
       ]
     }, 
     {
+      "type": "ansible-local", 
       "extra_arguments": [
         "--extra-vars", 
         "galaxy_user_name={{ user `username` }}", 
         "--extra-vars", 
-        "supervisor_docker_autostart={{ user `docker_autostart`}}"
+        "supervisor_docker_autostart={{ user `docker_autostart`}}", 
+        "--extra-vars", 
+        "galaxy_devbox_include_x={{ user `include_x`}}"
       ], 
       "role_paths": [
         "roles/galaxyprojectdotorg.galaxy-os", 
@@ -207,6 +211,7 @@
         "roles/galaxyprojectdotorg.cloudmantrackster", 
         "roles/galaxyprojectdotorg.devbox", 
         "roles/galaxyprojectdotorg.galaxy", 
+        "roles/galaxyprojectdotorg.galaxy_toolshed", 
         "roles/galaxyprojectdotorg.galaxy-extras", 
         "roles/smola.java"
       ], 
@@ -218,7 +223,7 @@
           "command": "echo '{{ user `username` }}' | ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 sudo -S -E ansible-playbook"
         }
       }, 
-      "type": "ansible-local", 
+      "playbook_dir": "playbook", 
       "playbook_file": "provision.yml", 
       "group_vars": "group_vars"
     }, 

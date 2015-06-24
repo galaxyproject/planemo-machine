@@ -10,3 +10,6 @@
 [submodule "roles/galaxyprojectdotorg.cloudman-database"]
 	path = roles/galaxyprojectdotorg.cloudman-database
 	url = https://github.com/galaxyproject/ansible-cloudman-database.git
+[submodule "roles/galaxyprojectdotorg.galaxy_toolshed"]
+	path = roles/galaxyprojectdotorg.galaxy_toolshed
+	url = https://github.com/galaxyproject/ansible-galaxy-toolshed.git
