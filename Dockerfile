@@ -30,13 +30,16 @@ ENV USER root
 RUN mkdir /opt/galaxy/db && chown -R postgres:postgres /opt/galaxy/db
 ADD group_vars/all /tmp/ansible/vars.yml
 ADD roles/ /tmp/ansible/roles
+ADD playbook/templates/ /tmp/ansible/templates
 ADD provision.yml /tmp/ansible/provision.yml
-RUN ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml --extra-vars galaxy_user_name=ubuntu --extra-vars galaxy_docker_sudo=true --extra-vars docker_package=lxc-docker-1.4.1 --tags=image -c local -e "@vars.yml" && \
-    ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml --extra-vars galaxy_user_name=ubuntu --extra-vars galaxy_docker_sudo=true --extra-vars docker_package=lxc-docker-1.4.1 --tags=database -c local -e "@vars.yml" && \
-    ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml --extra-vars galaxy_user_name=ubuntu --extra-vars galaxy_docker_sudo=true --extra-vars docker_package=lxc-docker-1.4.1 --tags=galaxy -c local -e "@vars.yml" && \
-    ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml --extra-vars galaxy_user_name=ubuntu --extra-vars galaxy_docker_sudo=true --extra-vars docker_package=lxc-docker-1.4.1 --tags=galaxyextras -c local -e "@vars.yml" && \
-    ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml --extra-vars galaxy_user_name=ubuntu  --extra-vars galaxy_docker_sudo=true --extra-vars docker_package=lxc-docker-1.4.1 --tags=devbox -c local -e "@vars.yml" &&  \
+ENV ANSIBLE_EXTRA_VARS="--extra-vars galaxy_user_name=ubuntu --extra-vars galaxy_docker_sudo=true --extra-vars docker_package=lxc-docker-1.4.1 --extra-vars startup_chown_on_directory=/opt/galaxy/tools"
+RUN ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml --tags=image        -c local -e "@vars.yml" $ANSIBLE_EXTRA_VARS && \
+    ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml --tags=database     -c local -e "@vars.yml" $ANSIBLE_EXTRA_VARS && \
+    ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml --tags=galaxy       -c local -e "@vars.yml" $ANSIBLE_EXTRA_VARS && \
+    ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml --tags=toolshed     -c local -e "@vars.yml" $ANSIBLE_EXTRA_VARS && \
+    ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml --tags=galaxyextras -c local -e "@vars.yml" $ANSIBLE_EXTRA_VARS && \
+    ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml --tags=devbox       -c local -e "@vars.yml" $ANSIBLE_EXTRA_VARS &&  \
     sh /tmp/cleanup.sh && \
     apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-CMD ["/usr/bin/supervisord", "-n"]
+CMD ["/usr/bin/startup"]

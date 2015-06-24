@@ -133,6 +133,7 @@ provisioners:
       <<: *virtualbox-ansible-command
   type: ansible-local
   playbook_file: provision.yml
+  playbook_dir: playbook
   role_paths:
   - roles/galaxyprojectdotorg.galaxy-os
   - roles/galaxyprojectdotorg.cloudman-database
