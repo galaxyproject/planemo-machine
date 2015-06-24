@@ -1,4 +1,5 @@
 DOCKER_COMMAND=docker
+TEST_FOLDER=test
 
 # Location of virtualenv used for development.
 VENV=.venv
@@ -29,4 +30,4 @@ docker-dev: packer
 	$(DOCKER_COMMAND) build -t planemo-dev -f dev.Dockerfile .
 
 run-docker-dev:
-	$(DOCKER_COMMAND) run -v `pwd`/other_user:/opt/galaxy/tools -p 8010:80 -i -t planemo-dev
+	$(DOCKER_COMMAND) run -v `pwd`/$(TEST_FOLDER):/opt/galaxy/tools -p 8010:80 -i -t planemo-dev

@@ -211,6 +211,7 @@
         "roles/galaxyprojectdotorg.cloudmantrackster", 
         "roles/galaxyprojectdotorg.devbox", 
         "roles/galaxyprojectdotorg.galaxy", 
+        "roles/galaxyprojectdotorg.galaxy_toolshed", 
         "roles/galaxyprojectdotorg.galaxy-extras", 
         "roles/smola.java"
       ], 
