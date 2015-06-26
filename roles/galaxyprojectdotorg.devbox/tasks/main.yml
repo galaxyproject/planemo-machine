@@ -112,3 +112,6 @@
 - name: Add small tool conf
   template: src=tool_conf.small.xml.j2 dest={{ small_tool_conf_path }}
   when: small_tool_conf
+
+- name: "Install Galaxy management scripts."
+  template: src=restart_galaxy.j2 dest=/usr/local/bin/restart_galaxy mode=a+x
