@@ -42,4 +42,7 @@ RUN ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provi
     sh /tmp/cleanup.sh && \
     apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+EXPOSE 80
+EXPOSE 9009
+
 CMD /usr/bin/startup; su - ubuntu
