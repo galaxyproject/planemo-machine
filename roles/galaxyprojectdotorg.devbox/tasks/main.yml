@@ -38,6 +38,10 @@
     - atom
   when: galaxy_devbox_include_x
 
+- name: Configure GUI to auto login the dev user.
+  template: src=10-xubuntu.conf.j2 dest=/etc/lightdm/lightdm.conf.d/10-xubuntu.conf
+  when: galaxy_devbox_include_x
+
 - name: Install linuxbrew
   sudo: True
   sudo_user: "{{ dev_user_name }}"
