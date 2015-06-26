@@ -65,9 +65,17 @@
 - name: Setup .planemo.yml
   template: src=planemo.yml.j2 dest={{ dev_user_home }}/.planemo.yml
 
+- name: Install linuxbrew bash completion stuff
+  sudo: True
+  sudo_user: "{{ dev_user_name }}"
+  shell: "{{ dev_user_home }}/.linuxbrew/bin/brew install -v bash-completion"
+
 # TODO: MANPATH, INFOPATH
 - name: Add linuxbrew to dev users PATH
   lineinfile: "dest={{ dev_user_shellrc }} line='export PATH={{ dev_user_home }}/.linuxbrew/bin:$PATH'"
+
+- name: Source linuxbrew bash completions
+  lineinfile: "dest={{ dev_user_shellrc }} line='. {{ dev_user_home }}/.linuxbrew/etc/bash_completion'"
 
 - name: Install the dev tools
   sudo: True
