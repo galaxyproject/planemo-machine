@@ -27,6 +27,17 @@
     - xubuntu-desktop
   when: galaxy_devbox_include_x
 
+# Setup atom (https://atom.io/) ppa and install.
+- name: Add custom Galaxy PPA (used for nginx package)
+  apt_repository: repo="ppa:webupd8team/atom" update_cache=yes
+  when: galaxy_devbox_include_x
+
+- name: Install Atom Edit system packages
+  apt: pkg={{ item }} state=latest update_cache=yes
+  with_items:
+    - atom
+  when: galaxy_devbox_include_x
+
 - name: Install linuxbrew
   sudo: True
   sudo_user: "{{ dev_user_name }}"
