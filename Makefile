@@ -1,3 +1,4 @@
+PACKER_COMMAND=packer
 DOCKER_COMMAND=docker
 TEST_FOLDER=test
 
@@ -5,6 +6,9 @@ TEST_FOLDER=test
 VENV=.venv
 # Source virtualenv to execute command (for pyyaml)
 IN_VENV=if [ -f $(VENV)/bin/activate ]; then . $(VENV)/bin/activate; fi;
+
+init:
+	git submodule init && git submodule update
 
 setup-venv:
 	if [ -f $(VENV) ]; then virtualenv $(VENV); fi;
@@ -15,13 +19,17 @@ packer:
 
 # Create virtualbox image for vagrant - setup vagrant goodies and do not use X
 # since vagrant is designed to be a command-line tool.
+# TODO: script to makefile
 vagrant: packer
 	bash vagrant_create_box.sh
 
 # Create a vanilla virtualbox image - setup X for people who would like a windowed
 # environment to develop in.
 virtualbox: packer
-	packer build -var 'include_x=true' --only virtualbox-iso packer.json
+	$(PACKER_COMMAND) build -var 'include_x=true' --only virtualbox-iso packer.json
+
+virtualbox-nox: packer
+	$(PACKER_COMMAND) build --only virtualbox-iso packer.json	
 
 docker: packer
 	$(DOCKER_COMMAND) build -t planemo .
@@ -31,3 +39,6 @@ docker-dev: packer
 
 run-docker-dev:
 	$(DOCKER_COMMAND) run -v `pwd`/$(TEST_FOLDER):/opt/galaxy/tools -p 8010:80 -i -t planemo-dev
+
+docker-via-packer: packer
+	$(PACKER_COMMAND) build -var 'docker_autostart=false' -var 'docker_base=toolshed/requirements' --only docker packer.json

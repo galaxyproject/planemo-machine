@@ -13,37 +13,48 @@ Setup
 This project makes use of git submodules and before you build any planemo
 machines, you'll need to initialize them:
 
-``git submodule init && git submodule update``
+``make init``
 
-
+This will simply execute the following command ``git submodule init && git submodule update``.
 
 Example Uses
 -----------------------
 
- * Build Docker image (using packer).
+ * Build and register Vagrant box (named ``planemo``).
 
-``packer build -var 'docker_autostart=false' --only docker packer.json``
+``make vagrant``
 
-Warning: Packer does not work with Docker 1.4
-(https://github.com/mitchellh/packer/issues/1752). The VM version of this
-build process will enable Docker by default - but when building a Docker image
-we disable this so the developer doesn't need to configure docker-in-docker
-functionality.
+ * Build a virtualbox OVA for this vagrant box.
 
- * Build Docker image (using packer) based on toolshed base dependencies (much faster).
+``make virtualbox``
 
-``packer build  -var 'docker_autostart=false' -var 'docker_base=toolshed/requirements' --only docker packer.json``
+The virtualbox OVA unlink the other variants will include a graphical environment ([Xubuntu](http://xubuntu.org/)) tailored for development (auto logins to the ``ubuntu`` user, configured with tools such as [Atom](https://atom.io/)).
 
- * Build a modified variant of the recipes with a docker file directly
+ * Build a modified variant of the recipes with a Dockerfile directly
      (skipping packer). Skipping packer makes it easier to iterate on and applicable
      for tools like Docker Hub, the cost is some amount of duplication between
      the ``Dockerfile`` in this directory and ``provision.yml``.
 
-``docker build .``
+``make docker``
 
- * Build and register Vagrant box (named galaxydev).
+To override the Docker command to use sudo for instance do
 
-``vagrant_create_box.sh``
+``make docker DOCKER_COMMAND='sudo docker'``
+
+ * Build docker image using development Dockerfile (``dev.Dockerfile``).
+     This Dockefile is broken out into more steps and will result in a much
+     larger final container but can be quicker to develop against since the
+     individual steps are checkmarked.
+
+``make docker-dev``
+
+ * Build Docker image (using packer directly).
+
+``make docker-via-packer``
+
+The VM version of this build process will enable Docker by default - but when
+building a Docker image we disable this so the developer doesn't need to
+configure docker-in-docker functionality.
 
  * Build Google Compute Engine image (untested). Follow instructions on
      https://www.packer.io/docs/builders/googlecompute.html, you will
@@ -83,8 +94,7 @@ Overview of the roles:
    eggs, sets up static configuration, etc...
  * ``galaxyprojectdotorg.galaxyextras`` New role created by extracting and
    generalizing stuff in Bjoern's Galaxy stable. Sets up Slurm, Proftp,
-   Supervisor, uwsgi, nginx. (TODO: Backport this to Docker project to
-   simplify the Dockerfile and unify the projects).
+   Supervisor, uwsgi, nginx.
  * ``galaxyprojectdotorg.devbox`` New role created explicitly for allocating
    a development box. Install ``linuxbrew``, ``planemo``, and a ``codebox``
    IDE.
