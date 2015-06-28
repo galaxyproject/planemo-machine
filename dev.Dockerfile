@@ -54,4 +54,4 @@ RUN sh /tmp/cleanup.sh
 EXPOSE 80
 EXPOSE 9009
 
-CMD /usr/bin/startup; su - ubuntu
+CMD GALAXY_LOGGING=notail /usr/bin/startup; su - ubuntu

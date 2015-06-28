@@ -32,10 +32,16 @@ virtualbox-nox: packer
 	$(PACKER_COMMAND) build --only virtualbox-iso packer.json	
 
 docker: packer
-	$(DOCKER_COMMAND) build -t planemo .
+	$(DOCKER_COMMAND) build -t planemo/interactive .
 
 docker-dev: packer
-	$(DOCKER_COMMAND) build -t planemo-dev -f dev.Dockerfile .
+	$(DOCKER_COMMAND) build -t planemo/interactive-dev -f dev.Dockerfile .
+
+docker-server: packer
+	$(DOCKER_COMMAND) build -t planemo/server .
+
+docker-server-dev: packer
+	$(DOCKER_COMMAND) build -t planemo/server-dev -f dev.server.Dockerfile .
 
 run-docker-dev:
 	$(DOCKER_COMMAND) run -v `pwd`/$(TEST_FOLDER):/opt/galaxy/tools -p 8010:80 -i -t planemo-dev

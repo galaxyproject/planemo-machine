@@ -45,4 +45,4 @@ RUN ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provi
 EXPOSE 80
 EXPOSE 9009
 
-CMD /usr/bin/startup; su - ubuntu
+CMD GALAXY_LOGGING=notail /usr/bin/startup; su - ubuntu
