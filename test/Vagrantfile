@@ -13,6 +13,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Forward nginx.
   config.vm.network "forwarded_port", guest: 80, host: 8010
+  config.vm.network "forwarded_port", guest: 9009, host: 9009
 
   config.vm.synced_folder ".", "/vagrant", disabled: true
   config.vm.synced_folder ".", "/opt/galaxy/tools", owner: "ubuntu"
