@@ -1,4 +1,8 @@
 ---
+# TODO: replace unneeded sudo and sudo_user attributes with user and group
+# permissions
+# TODO: break into smaller tasks - such as configuring all X stuff with a 
+# single command.
 - name: Install the debs
   sudo: True
   apt: name={{ item }} state=latest update_cache=yes
@@ -64,6 +68,37 @@
 
 - name: Setup .planemo.yml
   template: src=planemo.yml.j2 dest={{ dev_user_home }}/.planemo.yml
+  sudo: True
+  sudo_user: "{{ dev_user_name }}"
+
+- name: Configure Destop directory.
+  file: path={{ dev_user_home }}/Desktop state=directory
+  sudo: True
+  sudo_user: "{{ dev_user_name }}"
+  when: galaxy_devbox_include_x
+
+- name: Configure Desktop link to development tools.
+  file: src={{ dev_tool_conf_dir }} dest={{ dev_user_home }}/Desktop/tools
+  sudo: True
+  sudo_user: "{{ dev_user_name }}"
+  when: galaxy_devbox_include_x
+
+- name: Configure Destop shortcuts.
+  template: src={{ item }}.desktop.j2 dest={{ dev_user_home }}/Desktop/{{ item }}.desktop
+  sudo: True
+  sudo_user: "{{ dev_user_name }}"
+  when: galaxy_devbox_include_x
+  with_items:
+    - atom
+    - codebox
+    - exo-terminal-emulator
+    - exo-web-browser
+    - galaxyproject
+    - ipython
+    - localgalaxy
+    - localtoolshed
+    - planemo
+    - toolsyntax
 
 - name: Install linuxbrew bash completion stuff
   sudo: True
