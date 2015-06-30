@@ -1,6 +1,7 @@
 PACKER_COMMAND=packer
 DOCKER_COMMAND=docker
 TEST_FOLDER=test
+IMAGE_NAME=planemo-machine
 
 # Location of virtualenv used for development.
 VENV=.venv
@@ -48,3 +49,9 @@ run-docker-dev:
 
 docker-via-packer: packer
 	$(PACKER_COMMAND) build -var 'docker_autostart=false' -var 'docker_base=toolshed/requirements' --only docker packer.json
+
+_virtualbox-ova:
+	mv output-virtualbox-iso/*ovf $(IMAGE_NAME).ovf
+	mv output-virtualbox-iso/*-disk1.vmdk $(IMAGE_NAME)-disk1.vmdk
+	tar cvf $(IMAGE_NAME).ova $(IMAGE_NAME).ovf
+	tar uvf $(IMAGE_NAME).ova $(IMAGE_NAME)-disk1.vmdk

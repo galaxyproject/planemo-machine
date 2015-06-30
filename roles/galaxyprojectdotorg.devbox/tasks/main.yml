@@ -67,26 +67,14 @@
   shell: "{{ dev_user_home }}/.linuxbrew/bin/brew install -v planemo"
 
 - name: Setup .planemo.yml
-  template: src=planemo.yml.j2 dest={{ dev_user_home }}/.planemo.yml
-  sudo: True
-  sudo_user: "{{ dev_user_name }}"
+  template: src=planemo.yml.j2 dest={{ dev_user_home }}/.planemo.yml owner={{ dev_user_name }} group={{ dev_user_group }}
 
 - name: Configure Destop directory.
-  file: path={{ dev_user_home }}/Desktop state=directory
-  sudo: True
-  sudo_user: "{{ dev_user_name }}"
-  when: galaxy_devbox_include_x
-
-- name: Configure Desktop link to development tools.
-  file: src={{ dev_tool_conf_dir }} dest={{ dev_user_home }}/Desktop/tools
-  sudo: True
-  sudo_user: "{{ dev_user_name }}"
+  file: path={{ dev_user_home }}/Desktop state=directory  owner={{ dev_user_name }} group={{ dev_user_group }}
   when: galaxy_devbox_include_x
 
 - name: Configure Destop shortcuts.
-  template: src={{ item }}.desktop.j2 dest={{ dev_user_home }}/Desktop/{{ item }}.desktop
-  sudo: True
-  sudo_user: "{{ dev_user_name }}"
+  template: src=Desktop/{{ item }}.desktop.j2 dest={{ dev_user_home }}/Desktop/{{ item }}.desktop mode=a+x owner={{ dev_user_name }} group={{ dev_user_group }}
   when: galaxy_devbox_include_x
   with_items:
     - atom
@@ -99,6 +87,10 @@
     - localtoolshed
     - planemo
     - toolsyntax
+
+- name: Configure Desktop link to development tools.
+  file: src={{ dev_tool_conf_dir }} dest={{ dev_user_home }}/Desktop/tools state=link owner={{ dev_user_name }} group={{ dev_user_group }} force=true
+  when: galaxy_devbox_include_x
 
 - name: Install linuxbrew bash completion stuff
   sudo: True
