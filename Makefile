@@ -53,9 +53,9 @@ docker-via-packer: packer
 _virtualbox-ova:
 	mv output-virtualbox-iso/*ovf $(IMAGE_NAME).ovf
 	mv output-virtualbox-iso/*-disk1.vmdk $(IMAGE_NAME)-disk1.vmdk
-	sed -i '/<File/c\<File ovf:href="planemo-machine-disk1.vmdk" ovf:id="file1"/>' $(NAME).ovf
-	sed -i '/<Clipboard/c\<Clipboard mode="Bidirectional"/>' $(NAME).ovf
-	sed -i "s:packer-virtualbox-iso:$(IMAGE_NAME):g" $(NAME).ovf
+	sed -i '/<File/c\<File ovf:href="planemo-machine-disk1.vmdk" ovf:id="file1"/>' $(IMAGE_NAME).ovf
+	sed -i '/<Clipboard/c\<Clipboard mode="Bidirectional"/>' $(IMAGE_NAME).ovf
+	sed -i "s:packer-virtualbox-iso:$(IMAGE_NAME):g" $(IMAGE_NAME).ovf
 	tar cvf $(IMAGE_NAME).ova $(IMAGE_NAME).ovf
 	tar uvf $(IMAGE_NAME).ova $(IMAGE_NAME)-disk1.vmdk
 
