@@ -3,9 +3,9 @@ variables:
   password: ubuntu
   docker_base: ubuntu:trusty
   docker_export_path: ''
-  docker_pull: true
-  docker_commit: false
-  docker_autostart: true
+  docker_pull: "true"
+  docker_commit: "false"
+  docker_autostart: "true"
   ami_access_key: ''
   ami_secret_key: ''
   ami_region: us-east-1
@@ -16,7 +16,7 @@ variables:
   gce_project_id: galaxydev
   gce_source_image: ubuntu-1404-trusty-v20150127
   gce_zone: us-central1-a
-  include_x: false
+  include_x: "false"
 
 builders:
 
