@@ -1,3 +1,4 @@
+
 # Piece-wise variant of the Dockerfile for testing - produces larger
 # images so it is less appropriate for publishing Docker images.
 FROM toolshed/requirements
@@ -34,7 +35,7 @@ ADD group_vars/all /tmp/ansible/vars.yml
 ADD roles/ /tmp/ansible/roles
 ADD playbook/templates/ /tmp/ansible/templates
 ADD provision.yml /tmp/ansible/provision.yml
-ENV ANSIBLE_EXTRA_VARS="--extra-vars galaxy_user_name=ubuntu --extra-vars galaxy_docker_sudo=true --extra-vars docker_package=lxc-docker-1.4.1 --extra-vars startup_chown_on_directory=/opt/galaxy/tools --extra-vars startup_bash=true"
+ENV ANSIBLE_EXTRA_VARS="--extra-vars galaxy_user_name=ubuntu --extra-vars galaxy_docker_sudo=true --extra-vars docker_package=docker-engine  --extra-vars startup_chown_on_directory=/opt/galaxy/tools"
 RUN ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml --tags=image -c local -e "@vars.yml" $ANSIBLE_EXTRA_VARS
 # Database creation and migration need to happen in the same step so
 # that postgres is still running.
@@ -50,6 +51,8 @@ RUN ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provi
 RUN ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml --tags=devbox -c local -e "@vars.yml" $ANSIBLE_EXTRA_VARS 
 ADD scripts/cleanup.sh /tmp/cleanup.sh
 RUN sh /tmp/cleanup.sh
+
+WORKDIR /
 
 EXPOSE 80
 EXPOSE 9009

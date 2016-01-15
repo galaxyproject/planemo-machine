@@ -1,0 +1,31 @@
+sudo: required
+language: python
+python: 2.7
+services:
+  - docker
+env:
+  - TOX_ENV=py27
+git:
+  submodules: false
+
+before_install:
+  - export PLANEMO_TRAVIS_USER=planemo
+  - export PLANEMO_UID=1450
+  - export PLANEMO_GID=1450
+  - export PLANEMO_HOME=/home/planemo
+
+  - sudo apt-get update -qq
+  - sudo apt-get install docker-engine --no-install-recommends -y -o Dpkg::Options::="--force-confmiss" -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confnew"
+  - docker --version
+  - docker info
+
+  - git submodule update --init --recursive
+  - sudo groupadd -r $PLANEMO_TRAVIS_USER -g $PLANEMO_GID
+  - sudo useradd -u $PLANEMO_UID -r -g $PLANEMO_TRAVIS_USER -d $PLANEMO_HOME -p travis_testing -c "Planemo user" $PLANEMO_TRAVIS_USER
+  - sudo mkdir $PLANEMO_HOME
+  - sudo chown -R $PLANEMO_TRAVIS_USER:$PLANEMO_TRAVIS_USER $PLANEMO_HOME
+
+script:
+  - docker build -t planemo/interactive .
+  - cd server
+  - docker build -t planemo/server .
