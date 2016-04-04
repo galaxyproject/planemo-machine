@@ -39,9 +39,9 @@ builders:
   guest_os_type: Ubuntu_64
   headless: true
   http_directory: http
-  iso_checksum: 9e5fecc94b3925bededed0fdca1bd417
+  iso_checksum: 2ac1f3e0de626e54d05065d6f549fa3a
   iso_checksum_type: md5
-  iso_url: http://releases.ubuntu.com/14.04/ubuntu-14.04.3-server-amd64.iso
+  iso_url: http://releases.ubuntu.com/14.04/ubuntu-14.04.4-server-amd64.iso
   shutdown_command: echo 'shutdown -P now' > shutdown.sh; echo '{{ user `username` }}'|sudo -S sh 'shutdown.sh'
   ssh_password: '{{ user `password` }}'
   ssh_port: 22
