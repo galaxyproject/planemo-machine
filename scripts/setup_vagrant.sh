@@ -10,7 +10,7 @@ sudo apt-get update -y -qq > /dev/null
 sudo apt-get upgrade -y -qq > /dev/null
 
 # Install necessary libraries for guest additions and Vagrant NFS Share
-sudo apt-get -y -q install linux-headers-$(uname -r) build-essential dkms nfs-common xserver-xorg xserver-xorg-core curl wget virtualbox-guest-utils virtualbox-guest-x11 virtualbox-guest-dkms
+sudo apt-get -y -q install linux-headers-$(uname -r) build-essential libyaml-dev dkms libffi-dev libssl-dev nfs-common xserver-xorg xserver-xorg-core curl wget virtualbox-guest-utils virtualbox-guest-x11 virtualbox-guest-dkms
 
 # Setup sudo to allow no-password sudo for "admin"
 groupadd -r admin
