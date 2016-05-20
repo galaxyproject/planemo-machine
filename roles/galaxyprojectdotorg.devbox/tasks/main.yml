@@ -110,6 +110,12 @@
   with_items:
     - emacs24-nox
 
+- name: Install the chromium browser
+  become: True
+  apt: name={{ item }} state=latest update_cache=yes
+  with_items:
+    - chromium-browser
+
 - name: Install node and npm for codebox.
   become: True
   apt: name={{ item }} state=latest update_cache=yes
