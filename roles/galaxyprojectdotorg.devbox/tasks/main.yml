@@ -4,7 +4,7 @@
 # TODO: break into smaller tasks - such as configuring all X stuff with a 
 # single command.
 - name: Install the debs
-  sudo: True
+  become: True
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
     - build-essential
@@ -23,7 +23,7 @@
     - cmake
 
 - name: Install the debs (X11 environment)
-  sudo: True
+  become: True
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
     - kate
@@ -47,23 +47,23 @@
   when: galaxy_devbox_include_x
 
 - name: Install linuxbrew
-  sudo: True
-  sudo_user: "{{ dev_user_name }}"
+  become: True
+  become_user: "{{ dev_user_name }}"
   shell: "ruby -e \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/linuxbrew/go/install)\""
 
 - name: Install vim extras
-  sudo: True
-  sudo_user: "{{ dev_user_name }}"
+  become: True
+  become_user: "{{ dev_user_name }}"
   shell: "curl http://j.mp/spf13-vim3 -L -o - | sh"
 
 - name: Tap galaxyproject recipes
-  sudo: True
-  sudo_user: "{{ dev_user_name }}"
+  become: True
+  become_user: "{{ dev_user_name }}"
   shell: "{{ dev_user_home }}//.linuxbrew/bin/brew tap galaxyproject/tap"
 
 - name: Install planemo
-  sudo: True
-  sudo_user: "{{ dev_user_name }}"
+  become: True
+  become_user: "{{ dev_user_name }}"
   shell: "{{ dev_user_home }}/.linuxbrew/bin/brew install -v planemo"
 
 - name: Setup .planemo.yml
@@ -93,8 +93,8 @@
   when: galaxy_devbox_include_x
 
 - name: Install linuxbrew bash completion stuff
-  sudo: True
-  sudo_user: "{{ dev_user_name }}"
+  become: True
+  become_user: "{{ dev_user_name }}"
   shell: "{{ dev_user_home }}/.linuxbrew/bin/brew install -v bash-completion"
 
 # TODO: MANPATH, INFOPATH
@@ -105,25 +105,25 @@
   lineinfile: "dest={{ dev_user_shellrc }} line='. {{ dev_user_home }}/.linuxbrew/etc/bash_completion'"
 
 - name: Install the dev tools
-  sudo: True
+  become: True
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
     - emacs24-nox
 
 - name: Install node and npm for codebox.
-  sudo: True
+  become: True
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
     - nodejs
     - npm
 
 - name: Link nodejs to node
-  sudo: True
+  become: True
   shell: "ln -f -s /usr/bin/nodejs /usr/bin/node"
 
 - name: Install codebox.
-  sudo: True
-  sudo_user: "{{ galaxy_user_name }}"
+  become: True
+  become_user: "{{ galaxy_user_name }}"
   shell: "mkdir -p {{ codebox_path }} && cd {{ codebox_path }} && npm install codebox@{{ codebox_version }}"
 
 - name: Add codebox to supervisor configuration.
