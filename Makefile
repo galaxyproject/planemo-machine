@@ -59,4 +59,12 @@ _virtualbox-ova:
 	tar cvf $(IMAGE_NAME).ova $(IMAGE_NAME).ovf
 	tar uvf $(IMAGE_NAME).ova $(IMAGE_NAME)-disk1.vmdk
 
+# Convert the VirtualBox Image into a Qemu Image for use in OpenStack
+_create_qemu_image: packer
+	qemu-img convert -O qcow2 $(IMAGE_NAME).ova $(IMAGE_NAME).qcow2
+
 virtualbox: _virtualbox _virtualbox-ova
+
+qemu: _virtualbox _virtualbox-ova _create_qemu_image
+
+
