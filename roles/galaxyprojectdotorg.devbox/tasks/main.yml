@@ -1,7 +1,7 @@
 ---
 # TODO: replace unneeded sudo and sudo_user attributes with user and group
 # permissions
-# TODO: break into smaller tasks - such as configuring all X stuff with a 
+# TODO: break into smaller tasks - such as configuring all X stuff with a
 # single command.
 - name: Install the debs
   sudo: True
@@ -21,6 +21,7 @@
     - zlib1g-dev
     - python-dev
     - cmake
+    - chromium-browser
 
 - name: Install the debs (X11 environment)
   sudo: True
