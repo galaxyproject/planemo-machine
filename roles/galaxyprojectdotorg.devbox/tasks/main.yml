@@ -146,3 +146,7 @@
 - name: "Eliminate unnecessary notifications on login."
   sudo: True
   shell: "rm -f /etc/update-motd.d/9*"
+
+- name: "Update login notifications."
+  sudo: True
+  shell: "/usr/sbin/update-motd"
