@@ -21,6 +21,7 @@
     - zlib1g-dev
     - python-dev
     - cmake
+    - chromium-browser
 
 - name: Install the debs (X11 environment)
   sudo: True
