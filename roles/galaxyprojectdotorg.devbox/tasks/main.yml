@@ -143,7 +143,3 @@
 
 - name: "Install Galaxy management scripts."
   template: src=restart_galaxy.j2 dest=/usr/local/bin/restart_galaxy mode=a+x
-
-- name: "Eliminate unnecessary notifications on login."
-  sudo: True
-  shell: "rm -f /etc/update-motd.d/9*"
