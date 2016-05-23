@@ -3,6 +3,11 @@
 # permissions
 # TODO: break into smaller tasks - such as configuring all X stuff with a 
 # single command.
+
+- name: Upgrade the system
+  become: True
+  apt: upgrade=dist
+
 - name: Install the debs
   become: True
   apt: name={{ item }} state=latest update_cache=yes
@@ -21,6 +26,7 @@
     - zlib1g-dev
     - python-dev
     - cmake
+    - tmux
 
 - name: Install the debs (X11 environment)
   become: True
@@ -131,6 +137,18 @@
   become: True
   become_user: "{{ galaxy_user_name }}"
   shell: "mkdir -p {{ codebox_path }} && cd {{ codebox_path }} && npm install codebox@{{ codebox_version }}"
+
+- name: Install more locales
+  locale_gen: name={{ item }} state=present
+  with_items:
+    - en_US.UTF-8
+    - en_GB.UTF-8
+    - de_DE.UTF-8
+
+- name: Deactivate auto updates
+  become: True
+  become_user: "{{ galaxy_user_name }}"
+  shell: "gsettings set org.gnome.settings-daemon.plugins.updates active false && gsettings set org.gnome.settings-daemon.plugins.updates auto-download-updates false"
 
 - name: Add codebox to supervisor configuration.
   template: src=supervisor.conf.j2 dest=/etc/supervisor/conf.d/codebox.conf
