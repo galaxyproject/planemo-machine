@@ -48,9 +48,12 @@
     - atom
   when: galaxy_devbox_include_x
 
-#- name: Configure GUI to auto login the dev user.
-#  template: src=10-xubuntu.conf.j2 dest=/etc/lightdm/lightdm.conf.d/10-xubuntu.conf
-#  when: galaxy_devbox_include_x
+- name: Ensures /etc/lightdm/lightdm.conf.d/ dir exists
+  file: path=/etc/lightdm/lightdm.conf.d/ state=directory
+
+- name: Configure GUI to auto login the dev user.
+  template: src=10-xubuntu.conf.j2 dest=/etc/lightdm/lightdm.conf.d/10-xubuntu.conf
+  when: galaxy_devbox_include_x
 
 - name: Install linuxbrew
   become: True
@@ -61,8 +64,6 @@
   become: True
   become_user: "{{ dev_user_name }}"
   shell: "curl http://j.mp/spf13-vim3 -L -o - | sh"
-
-#get_url
 
 - name: Tap galaxyproject recipes
   become: True
@@ -145,7 +146,6 @@
   become: True
   become_user: "{{ galaxy_user_name }}"
   shell: "gsettings set org.gnome.settings-daemon.plugins.updates active false && gsettings set org.gnome.settings-daemon.plugins.updates auto-download-updates false"
-
 
 - name: Add dev tool configuration file.
   template: src=dev_tool_conf.xml.j2 dest={{ dev_tool_conf }}
