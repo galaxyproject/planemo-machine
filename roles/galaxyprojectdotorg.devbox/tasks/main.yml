@@ -48,9 +48,9 @@
     - atom
   when: galaxy_devbox_include_x
 
-- name: Configure GUI to auto login the dev user.
-  template: src=10-xubuntu.conf.j2 dest=/etc/lightdm/lightdm.conf.d/10-xubuntu.conf
-  when: galaxy_devbox_include_x
+#- name: Configure GUI to auto login the dev user.
+#  template: src=10-xubuntu.conf.j2 dest=/etc/lightdm/lightdm.conf.d/10-xubuntu.conf
+#  when: galaxy_devbox_include_x
 
 - name: Install linuxbrew
   become: True
@@ -61,6 +61,8 @@
   become: True
   become_user: "{{ dev_user_name }}"
   shell: "curl http://j.mp/spf13-vim3 -L -o - | sh"
+
+#get_url
 
 - name: Tap galaxyproject recipes
   become: True
@@ -84,7 +86,6 @@
   when: galaxy_devbox_include_x
   with_items:
     - atom
-    - codebox
     - exo-terminal-emulator
     - exo-web-browser
     - galaxyproject
@@ -122,7 +123,7 @@
   with_items:
     - chromium-browser
 
-- name: Install node and npm for codebox.
+- name: Install node and npm
   become: True
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
@@ -132,11 +133,6 @@
 - name: Link nodejs to node
   become: True
   shell: "ln -f -s /usr/bin/nodejs /usr/bin/node"
-
-- name: Install codebox.
-  become: True
-  become_user: "{{ galaxy_user_name }}"
-  shell: "mkdir -p {{ codebox_path }} && cd {{ codebox_path }} && npm install codebox@{{ codebox_version }}"
 
 - name: Install more locales
   locale_gen: name={{ item }} state=present
@@ -150,8 +146,6 @@
   become_user: "{{ galaxy_user_name }}"
   shell: "gsettings set org.gnome.settings-daemon.plugins.updates active false && gsettings set org.gnome.settings-daemon.plugins.updates auto-download-updates false"
 
-- name: Add codebox to supervisor configuration.
-  template: src=supervisor.conf.j2 dest=/etc/supervisor/conf.d/codebox.conf
 
 - name: Add dev tool configuration file.
   template: src=dev_tool_conf.xml.j2 dest={{ dev_tool_conf }}
