@@ -1,7 +1,7 @@
 ---
 # TODO: replace unneeded sudo and sudo_user attributes with user and group
 # permissions
-# TODO: break into smaller tasks - such as configuring all X stuff with a 
+# TODO: break into smaller tasks - such as configuring all X stuff with a
 # single command.
 - name: Install the debs
   sudo: True
@@ -142,3 +142,11 @@
 
 - name: "Install Galaxy management scripts."
   template: src=restart_galaxy.j2 dest=/usr/local/bin/restart_galaxy mode=a+x
+
+- name: "Eliminate unnecessary notifications on login."
+  sudo: True
+  shell: "rm -f /etc/update-motd.d/9*"
+
+- name: "Update login notifications."
+  sudo: True
+  shell: "/usr/sbin/update-motd"
