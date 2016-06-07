@@ -6,7 +6,7 @@
   pre_tasks:
     - name: Assure galaxyFS dir exists
       file: path={{ galaxyFS_base_dir }} state=directory owner={{ galaxy_user_name }} group={{ galaxy_user_name }}
-      sudo_user: root
+      become: True
     - name: Create shed tools dir
       file: state=directory path={{ galaxy_shed_tools_dir }}
     - name: Install postgres system package (creates user for next step)
@@ -16,17 +16,17 @@
       # cloudman uses PIP, I think this is preferable?
     - name: Create database dir
       file: path={{ galaxy_db_dir }} state=directory owner=postgres group=postgres
-      sudo_user: root
+      become: True
   roles:
       - role: galaxyprojectdotorg.galaxy-os
         tags: image
       - role: galaxyprojectdotorg.cloudman-database
-        sudo: yes
-        sudo_user: postgres
+        become: True
+        become_user: postgres
         tags: database
       - role: galaxyprojectdotorg.galaxy
-        sudo: yes
-        sudo_user: "{{ galaxy_user_name }}"
+        become: True
+        become_user: "{{ galaxy_user_name }}"
         tags: galaxy
       - role: galaxyprojectdotorg.galaxy-extras
         tags: galaxyextras

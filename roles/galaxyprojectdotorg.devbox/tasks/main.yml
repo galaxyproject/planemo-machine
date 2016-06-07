@@ -1,7 +1,7 @@
 ---
 # TODO: replace unneeded sudo and sudo_user attributes with user and group
 # permissions
-# TODO: break into smaller tasks - such as configuring all X stuff with a 
+# TODO: break into smaller tasks - such as configuring all X stuff with a
 # single command.
 
 - name: Upgrade the system
@@ -10,6 +10,7 @@
 
 - name: Install the debs
   become: True
+  become_method: sudo
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
     - build-essential
@@ -27,25 +28,26 @@
     - python-dev
     - cmake
     - tmux
-
-- name: Install the debs (X11 environment)
-  become: True
-  apt: name={{ item }} state=latest update_cache=yes
-  with_items:
-    - kate
-    - gedit
-    - xubuntu-desktop
-  when: galaxy_devbox_include_x
+    - vim
+    - emacs24-nox
+    - supervisor
+    - nodejs
+    - npm
 
 # Setup atom (https://atom.io/) ppa and install.
 - name: Add custom Galaxy PPA (used for nginx package)
   apt_repository: repo="ppa:webupd8team/atom" update_cache=yes
   when: galaxy_devbox_include_x
 
-- name: Install Atom Edit system packages
-  apt: pkg={{ item }} state=latest update_cache=yes
+- name: Install the debs (X11 environment)
+  become: True
+  apt: name={{ item }} state=latest update_cache=yes
   with_items:
     - atom
+    - kate
+    - gedit
+    - xubuntu-desktop
+    - chromium-browser
   when: galaxy_devbox_include_x
 
 - name: Ensures /etc/lightdm/lightdm.conf.d/ dir exists
@@ -57,21 +59,25 @@
 
 - name: Install linuxbrew
   become: True
+  become_method: sudo
   become_user: "{{ dev_user_name }}"
   shell: "ruby -e \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/linuxbrew/go/install)\""
 
 - name: Install vim extras
   become: True
+  become_method: sudo
   become_user: "{{ dev_user_name }}"
   shell: "curl http://j.mp/spf13-vim3 -L -o - | sh"
 
 - name: Tap galaxyproject recipes
   become: True
+  become_method: sudo
   become_user: "{{ dev_user_name }}"
   shell: "{{ dev_user_home }}//.linuxbrew/bin/brew tap galaxyproject/tap"
 
 - name: Install planemo
   become: True
+  become_method: sudo
   become_user: "{{ dev_user_name }}"
   shell: "{{ dev_user_home }}/.linuxbrew/bin/brew install -v planemo"
 
@@ -102,6 +108,7 @@
 
 - name: Install linuxbrew bash completion stuff
   become: True
+  become_method: sudo
   become_user: "{{ dev_user_name }}"
   shell: "{{ dev_user_home }}/.linuxbrew/bin/brew install -v bash-completion"
 
@@ -160,3 +167,11 @@
 
 - name: "Install Galaxy management scripts."
   template: src=restart_galaxy.j2 dest=/usr/local/bin/restart_galaxy mode=a+x
+
+- name: "Eliminate unnecessary notifications on login."
+  become: True
+  become_method: sudo
+  shell: "rm -f /etc/update-motd.d/9*"
+
+- name: "Ensure that planemo-machine's environment settings are applied."
+  lineinfile: "dest={{ dev_user_home }}/.bashrc line='[[ -f $HOME/.planemo-machine ]] && . $HOME/.planemo-machine'"

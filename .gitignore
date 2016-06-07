@@ -4,3 +4,6 @@ packer_cache
 docker*.tar
 gce_account.json
 .venv
+*.vmdk
+*.ova
+*.ovf
