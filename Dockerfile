@@ -1,4 +1,4 @@
-FROM toolshed/requirements
+FROM toolshed/requirements:16.04
 MAINTAINER John Chilton <jmchilton@gmail.com>
 
 # Pre-install a bunch of packages to speed up ansible steps.

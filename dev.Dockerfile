@@ -1,7 +1,7 @@
 
 # Piece-wise variant of the Dockerfile for testing - produces larger
 # images so it is less appropriate for publishing Docker images.
-FROM toolshed/requirements
+FROM toolshed/requirements:16.04
 MAINTAINER John Chilton <jmchilton@gmail.com>
 
 # Pre-install a bunch of packages to speed up ansible steps.
