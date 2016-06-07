@@ -132,6 +132,15 @@
     - nodejs
     - npm
 
+- name: Start supervisord on boot
+  service: name=supervisor enabled=yes
+
+- name: activate supervisor on boot, the shell way
+  become: True
+  shell: "systemctl enable supervisor.service"
+
+
+
 - name: Link nodejs to node
   become: True
   shell: "ln -f -s /usr/bin/nodejs /usr/bin/node"
