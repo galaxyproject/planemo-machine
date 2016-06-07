@@ -10,7 +10,6 @@
 
 - name: Install the debs
   become: True
-  become_method: sudo
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
     - build-essential
@@ -59,25 +58,21 @@
 
 - name: Install linuxbrew
   become: True
-  become_method: sudo
   become_user: "{{ dev_user_name }}"
   shell: "ruby -e \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/linuxbrew/go/install)\""
 
 - name: Install vim extras
   become: True
-  become_method: sudo
   become_user: "{{ dev_user_name }}"
   shell: "curl http://j.mp/spf13-vim3 -L -o - | sh"
 
 - name: Tap galaxyproject recipes
   become: True
-  become_method: sudo
   become_user: "{{ dev_user_name }}"
   shell: "{{ dev_user_home }}//.linuxbrew/bin/brew tap galaxyproject/tap"
 
 - name: Install planemo
   become: True
-  become_method: sudo
   become_user: "{{ dev_user_name }}"
   shell: "{{ dev_user_home }}/.linuxbrew/bin/brew install -v planemo"
 
@@ -108,7 +103,6 @@
 
 - name: Install linuxbrew bash completion stuff
   become: True
-  become_method: sudo
   become_user: "{{ dev_user_name }}"
   shell: "{{ dev_user_home }}/.linuxbrew/bin/brew install -v bash-completion"
 
@@ -170,7 +164,6 @@
 
 - name: "Eliminate unnecessary notifications on login."
   become: True
-  become_method: sudo
   shell: "rm -f /etc/update-motd.d/9*"
 
 - name: "Ensure that planemo-machine's environment settings are applied."
