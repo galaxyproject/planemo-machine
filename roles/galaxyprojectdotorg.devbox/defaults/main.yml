@@ -1,7 +1,7 @@
 codebox_path: "/opt/galaxy/codebox"
 codebox_port: 8991
 
-codebox_version: 0.8.1
+codebox_version: 0.8.3
 
 small_tool_conf: no
 

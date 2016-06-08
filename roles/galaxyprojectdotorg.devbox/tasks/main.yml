@@ -3,8 +3,13 @@
 # permissions
 # TODO: break into smaller tasks - such as configuring all X stuff with a
 # single command.
+
+- name: Upgrade the system
+  become: True
+  apt: upgrade=dist
+
 - name: Install the debs
-  sudo: True
+  become: True
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
     - build-essential
@@ -21,49 +26,55 @@
     - zlib1g-dev
     - python-dev
     - cmake
-
-- name: Install the debs (X11 environment)
-  sudo: True
-  apt: name={{ item }} state=latest update_cache=yes
-  with_items:
-    - kate
-    - gedit
-    - xubuntu-desktop
-  when: galaxy_devbox_include_x
+    - tmux
+    - update-motd
+    - vim
+    - emacs24-nox
+    - supervisor
+    - nodejs
+    - npm
 
 # Setup atom (https://atom.io/) ppa and install.
 - name: Add custom Galaxy PPA (used for nginx package)
   apt_repository: repo="ppa:webupd8team/atom" update_cache=yes
   when: galaxy_devbox_include_x
 
-- name: Install Atom Edit system packages
-  apt: pkg={{ item }} state=latest update_cache=yes
+- name: Install the debs (X11 environment)
+  become: True
+  apt: name={{ item }} state=latest update_cache=yes
   with_items:
     - atom
+    - kate
+    - gedit
+    - xubuntu-desktop
+    - chromium-browser
   when: galaxy_devbox_include_x
+
+- name: Ensures /etc/lightdm/lightdm.conf.d/ dir exists
+  file: path=/etc/lightdm/lightdm.conf.d/ state=directory
 
 - name: Configure GUI to auto login the dev user.
   template: src=10-xubuntu.conf.j2 dest=/etc/lightdm/lightdm.conf.d/10-xubuntu.conf
   when: galaxy_devbox_include_x
 
 - name: Install linuxbrew
-  sudo: True
-  sudo_user: "{{ dev_user_name }}"
+  become: True
+  become_user: "{{ dev_user_name }}"
   shell: "ruby -e \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/linuxbrew/go/install)\""
 
 - name: Install vim extras
-  sudo: True
-  sudo_user: "{{ dev_user_name }}"
+  become: True
+  become_user: "{{ dev_user_name }}"
   shell: "curl http://j.mp/spf13-vim3 -L -o - | sh"
 
 - name: Tap galaxyproject recipes
-  sudo: True
-  sudo_user: "{{ dev_user_name }}"
+  become: True
+  become_user: "{{ dev_user_name }}"
   shell: "{{ dev_user_home }}//.linuxbrew/bin/brew tap galaxyproject/tap"
 
 - name: Install planemo
-  sudo: True
-  sudo_user: "{{ dev_user_name }}"
+  become: True
+  become_user: "{{ dev_user_name }}"
   shell: "{{ dev_user_home }}/.linuxbrew/bin/brew install -v planemo"
 
 - name: Setup .planemo.yml
@@ -78,7 +89,6 @@
   when: galaxy_devbox_include_x
   with_items:
     - atom
-    - codebox
     - exo-terminal-emulator
     - exo-web-browser
     - galaxyproject
@@ -93,8 +103,8 @@
   when: galaxy_devbox_include_x
 
 - name: Install linuxbrew bash completion stuff
-  sudo: True
-  sudo_user: "{{ dev_user_name }}"
+  become: True
+  become_user: "{{ dev_user_name }}"
   shell: "{{ dev_user_home }}/.linuxbrew/bin/brew install -v bash-completion"
 
 # TODO: MANPATH, INFOPATH
@@ -105,29 +115,48 @@
   lineinfile: "dest={{ dev_user_shellrc }} line='. {{ dev_user_home }}/.linuxbrew/etc/bash_completion'"
 
 - name: Install the dev tools
-  sudo: True
+  become: True
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
     - emacs24-nox
 
-- name: Install node and npm for codebox.
-  sudo: True
+- name: Install the chromium browser
+  become: True
+  apt: name={{ item }} state=latest update_cache=yes
+  with_items:
+    - chromium-browser
+
+- name: Install node and npm
+  become: True
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
     - nodejs
     - npm
 
+- name: Start supervisord on boot
+  service: name=supervisor enabled=yes
+
+- name: activate supervisor on boot, the shell way
+  become: True
+  shell: "systemctl enable supervisor.service"
+
+
+
 - name: Link nodejs to node
-  sudo: True
+  become: True
   shell: "ln -f -s /usr/bin/nodejs /usr/bin/node"
 
-- name: Install codebox.
-  sudo: True
-  sudo_user: "{{ galaxy_user_name }}"
-  shell: "mkdir -p {{ codebox_path }} && cd {{ codebox_path }} && npm install codebox@{{ codebox_version }}"
+- name: Install more locales
+  locale_gen: name={{ item }} state=present
+  with_items:
+    - en_US.UTF-8
+    - en_GB.UTF-8
+    - de_DE.UTF-8
 
-- name: Add codebox to supervisor configuration.
-  template: src=supervisor.conf.j2 dest=/etc/supervisor/conf.d/codebox.conf
+- name: Deactivate auto updates
+  become: True
+  become_user: "{{ galaxy_user_name }}"
+  shell: "gsettings set org.gnome.settings-daemon.plugins.updates active false && gsettings set org.gnome.settings-daemon.plugins.updates auto-download-updates false"
 
 - name: Add dev tool configuration file.
   template: src=dev_tool_conf.xml.j2 dest={{ dev_tool_conf }}
@@ -144,9 +173,12 @@
   template: src=restart_galaxy.j2 dest=/usr/local/bin/restart_galaxy mode=a+x
 
 - name: "Eliminate unnecessary notifications on login."
-  sudo: True
+  become: True
   shell: "rm -f /etc/update-motd.d/9*"
 
+- name: "Ensure that planemo-machine's environment settings are applied."
+  lineinfile: "dest={{ dev_user_home }}/.bashrc line='[[ -f $HOME/.planemo-machine ]] && . $HOME/.planemo-machine'"
+
 - name: "Update login notifications."
-  sudo: True
+  become: True
   shell: "/usr/sbin/update-motd"
