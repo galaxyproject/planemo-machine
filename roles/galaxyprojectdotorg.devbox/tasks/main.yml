@@ -27,6 +27,7 @@
     - python-dev
     - cmake
     - tmux
+    - update-motd
     - vim
     - emacs24-nox
     - supervisor
