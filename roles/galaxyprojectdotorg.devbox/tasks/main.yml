@@ -177,3 +177,7 @@
 
 - name: "Ensure that planemo-machine's environment settings are applied."
   lineinfile: "dest={{ dev_user_home }}/.bashrc line='[[ -f $HOME/.planemo-machine ]] && . $HOME/.planemo-machine'"
+
+- name: "Update login notifications."
+  become: True
+  shell: "/usr/sbin/update-motd"
