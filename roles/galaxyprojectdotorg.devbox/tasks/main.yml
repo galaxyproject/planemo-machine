@@ -5,11 +5,9 @@
 # single command.
 
 - name: Upgrade the system
-  become: True
   apt: upgrade=dist
 
 - name: Install the debs
-  become: True
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
     - build-essential
@@ -40,14 +38,30 @@
   when: galaxy_devbox_include_x
 
 - name: Install the debs (X11 environment)
-  become: True
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
     - atom
-    - kate
     - gedit
-    - xubuntu-desktop
-    - chromium-browser
+    - xubuntu-core
+    - firefox
+  when: galaxy_devbox_include_x
+
+- name: Add Google key for Chrome installation
+  apt_key: 
+    url: https://dl.google.com/linux/linux_signing_key.pub
+    state: present
+  when: galaxy_devbox_include_x
+
+- name: Add Google APT repository
+  apt_repository: 
+    repo: deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main
+    state: present
+  when: galaxy_devbox_include_x
+
+- name: Install Chrome Stable
+  apt: 
+    name: google-chrome-stable
+    state: latest
   when: galaxy_devbox_include_x
 
 - name: Ensures /etc/lightdm/lightdm.conf.d/ dir exists
@@ -115,19 +129,11 @@
   lineinfile: "dest={{ dev_user_shellrc }} line='. {{ dev_user_home }}/.linuxbrew/etc/bash_completion'"
 
 - name: Install the dev tools
-  become: True
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
     - emacs24-nox
 
-- name: Install the chromium browser
-  become: True
-  apt: name={{ item }} state=latest update_cache=yes
-  with_items:
-    - chromium-browser
-
 - name: Install node and npm
-  become: True
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
     - nodejs
@@ -139,8 +145,6 @@
 - name: activate supervisor on boot, the shell way
   become: True
   shell: "systemctl enable supervisor.service"
-
-
 
 - name: Link nodejs to node
   become: True
