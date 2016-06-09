@@ -5,11 +5,9 @@
 # single command.
 
 - name: Upgrade the system
-  become: True
   apt: upgrade=dist
 
 - name: Install the debs
-  become: True
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
     - build-essential
@@ -40,13 +38,11 @@
   when: galaxy_devbox_include_x
 
 - name: Install the debs (X11 environment)
-  become: True
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
     - atom
-    - kate
     - gedit
-    - xubuntu-desktop
+    - xubuntu-core
     - chromium-browser
   when: galaxy_devbox_include_x
 
@@ -115,19 +111,11 @@
   lineinfile: "dest={{ dev_user_shellrc }} line='. {{ dev_user_home }}/.linuxbrew/etc/bash_completion'"
 
 - name: Install the dev tools
-  become: True
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
     - emacs24-nox
 
-- name: Install the chromium browser
-  become: True
-  apt: name={{ item }} state=latest update_cache=yes
-  with_items:
-    - chromium-browser
-
 - name: Install node and npm
-  become: True
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
     - nodejs
@@ -139,8 +127,6 @@
 - name: activate supervisor on boot, the shell way
   become: True
   shell: "systemctl enable supervisor.service"
-
-
 
 - name: Link nodejs to node
   become: True
