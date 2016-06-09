@@ -43,7 +43,25 @@
     - atom
     - gedit
     - xubuntu-core
-    - chromium-browser
+    - firefox
+  when: galaxy_devbox_include_x
+
+- name: Add Google key for Chrome installation
+  apt_key: 
+    url: https://dl.google.com/linux/linux_signing_key.pub
+    state: present
+  when: galaxy_devbox_include_x
+
+- name: Add Google APT repository
+  apt_repository: 
+    repo: deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main
+    state: present
+  when: galaxy_devbox_include_x
+
+- name: Install Chrome Stable
+  apt: 
+    name: google-chrome-stable
+    state: latest
   when: galaxy_devbox_include_x
 
 - name: Ensures /etc/lightdm/lightdm.conf.d/ dir exists
