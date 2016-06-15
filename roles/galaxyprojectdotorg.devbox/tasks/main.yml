@@ -41,25 +41,26 @@
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
     - atom
+    - xfce4-xkb-plugin
     - gedit
     - xubuntu-core
     - firefox
   when: galaxy_devbox_include_x
 
 - name: Add Google key for Chrome installation
-  apt_key: 
+  apt_key:
     url: https://dl.google.com/linux/linux_signing_key.pub
     state: present
   when: galaxy_devbox_include_x
 
 - name: Add Google APT repository
-  apt_repository: 
+  apt_repository:
     repo: deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main
     state: present
   when: galaxy_devbox_include_x
 
 - name: Install Chrome Stable
-  apt: 
+  apt:
     name: google-chrome-stable
     state: latest
   when: galaxy_devbox_include_x
@@ -181,8 +182,19 @@
   shell: "rm -f /etc/update-motd.d/9*"
 
 - name: "Ensure that planemo-machine's environment settings are applied."
-  lineinfile: "dest={{ dev_user_home }}/.bashrc line='[[ -f $HOME/.planemo-machine ]] && . $HOME/.planemo-machine'"
+  lineinfile: dest={{ dev_user_home }}/.bashrc line='[[ -f $HOME/.planemo-machine ]] && . $HOME/.planemo-machine'
+
+- name: "Add the local environment settings."
+  template: src=planemo-machine.sh.j2 dest={{ dev_user_home }}/.planemo-machine
+  when: galaxy_devbox_include_x
 
 - name: "Update login notifications."
   become: True
   shell: "/usr/sbin/update-motd"
+
+- name: Ensure existence of target directory for next step.
+  file: path={{ dev_user_home }}/.config/xfce4/xfconf/xfce-perchannel-xml state=directory
+
+- name: "Add the keyboard layout switcher to the panel."
+  template: src=xfce4-panel.xml.j2 dest={{ dev_user_home }}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
+  when: galaxy_devbox_include_x
