@@ -42,12 +42,18 @@
           "{{.Name}}", 
           "--memory", 
           "2048"
-        ], 
+        ],
+        [
+          "modifyvm", 
+          "{{.Name}}", 
+          "--vram", 
+          "128"
+        ],
         [
           "modifyvm", 
           "{{.Name}}", 
           "--cpus", 
-          "4"
+          "1"
         ]
       ], 
       "boot_command": [
@@ -99,12 +105,18 @@
           "{{.Name}}", 
           "--memory", 
           "2048"
-        ], 
+        ],
+        [
+          "modifyvm", 
+          "{{.Name}}", 
+          "--vram", 
+          "128"
+        ],
         [
           "modifyvm", 
           "{{.Name}}", 
           "--cpus", 
-          "4"
+          "1"
         ]
       ], 
       "boot_command": [
