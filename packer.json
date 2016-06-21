@@ -46,8 +46,14 @@
         [
           "modifyvm", 
           "{{.Name}}", 
+          "--vram", 
+          "32"
+        ], 
+        [
+          "modifyvm", 
+          "{{.Name}}", 
           "--cpus", 
-          "4"
+          "1"
         ]
       ], 
       "boot_command": [
@@ -103,8 +109,14 @@
         [
           "modifyvm", 
           "{{.Name}}", 
+          "--vram", 
+          "32"
+        ], 
+        [
+          "modifyvm", 
+          "{{.Name}}", 
           "--cpus", 
-          "4"
+          "1"
         ]
       ], 
       "boot_command": [
