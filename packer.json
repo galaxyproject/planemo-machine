@@ -42,13 +42,13 @@
           "{{.Name}}", 
           "--memory", 
           "2048"
-        ],
+        ], 
         [
           "modifyvm", 
           "{{.Name}}", 
           "--vram", 
           "32"
-        ],
+        ], 
         [
           "modifyvm", 
           "{{.Name}}", 
@@ -105,13 +105,13 @@
           "{{.Name}}", 
           "--memory", 
           "2048"
-        ],
+        ], 
         [
           "modifyvm", 
           "{{.Name}}", 
           "--vram", 
           "32"
-        ],
+        ], 
         [
           "modifyvm", 
           "{{.Name}}", 

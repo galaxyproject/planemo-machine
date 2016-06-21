@@ -69,8 +69,12 @@ builders:
     - '2048'
   - - modifyvm
     - '{{.Name}}'
+    - --vram
+    - '32'
+  - - modifyvm
+    - '{{.Name}}'
     - --cpus
-    - '4'
+    - '1'
   virtualbox_version_file: .vbox_version
 
 # Builder for VirtualBox + Vagrant export
