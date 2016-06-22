@@ -198,3 +198,7 @@
 - name: "Add the keyboard layout switcher to the panel."
   template: src=xfce4-panel.xml.j2 dest={{ dev_user_home }}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
   when: galaxy_devbox_include_x
+
+- name: "Workaround for atom"
+  become: True
+  shell: "/opt/atom/atom &"
