@@ -33,7 +33,7 @@
     - npm
 
 # Setup atom (https://atom.io/) ppa and install.
-- name: Add custom Galaxy PPA (used for nginx package)
+- name: Add custom Galaxy PPA (used for atom package)
   apt_repository: repo="ppa:webupd8team/atom" update_cache=yes
   when: galaxy_devbox_include_x
 
