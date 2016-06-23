@@ -28,7 +28,7 @@ Example Uses
 
 ``make virtualbox``
 
-The virtualbox OVA unlink the other variants will include a graphical environment ([Xubuntu](http://xubuntu.org/)) tailored for development (auto logins to the ``ubuntu`` user, configured with tools such as [Atom](https://atom.io/)).
+The virtualbox OVA unlink the other variants will include a graphical environment ([Xubuntu](http://xubuntu.org/)) tailored for development (auto logins to the ``ubuntu`` user, configured with tools such as [Komodo](http://komodoide.com/komodo-edit/)).
 
  * Build a modified variant of the recipes with a Dockerfile directly
      (skipping packer). Skipping packer makes it easier to iterate on and applicable
