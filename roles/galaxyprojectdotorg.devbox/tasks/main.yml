@@ -109,6 +109,7 @@
   when: galaxy_devbox_include_x
   with_items:
     - atom
+    - komodo-edit
     - exo-terminal-emulator
     - exo-web-browser
     - galaxyproject
@@ -183,6 +184,9 @@
 - name: "Update login notifications."
   become: True
   shell: "/usr/sbin/update-motd"
+
+- name: Ensure existence of .config directory
+  file: path={{ dev_user_home }}/.config/ state=directory owner={{ dev_user_name }} group={{ dev_user_group }}
 
 - name: Ensure existence of target directory for next step.
   file: path={{ dev_user_home }}/.config/xfce4/xfconf/xfce-perchannel-xml state=directory owner={{ dev_user_name }} group={{ dev_user_group }}
