@@ -193,7 +193,6 @@
 
 - name: "Add the local environment settings."
   template: src=planemo-machine.sh.j2 dest={{ dev_user_home }}/.planemo-machine
-  when: galaxy_devbox_include_x
 
 - name: "Update login notifications."
   become: True
@@ -204,6 +203,14 @@
 
 - name: Ensure existence of target directory for next step.
   file: path={{ dev_user_home }}/.config/xfce4/xfconf/xfce-perchannel-xml state=directory owner={{ dev_user_name }} group={{ dev_user_group }}
+
+- name: Download miniconda
+  become: True
+  become_user: "{{ dev_user_name }}"
+  shell: "cd {{ dev_user_home }} && curl https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -L -o miniconda.sh && bash miniconda.sh -b"
+
+- name: Add miniconda bin to PATH.
+  lineinfile: "dest={{ dev_user_shellrc }} line='export PATH=$PATH:{{ dev_user_home }}/miniconda2/bin/'"
 
 - name: "Add the keyboard layout switcher to the panel."
   template: src=xfce4-panel.xml.j2 dest={{ dev_user_home }}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
