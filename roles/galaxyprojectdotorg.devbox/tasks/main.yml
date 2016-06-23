@@ -1,6 +1,4 @@
 ---
-# TODO: replace unneeded sudo and sudo_user attributes with user and group
-# permissions
 # TODO: break into smaller tasks - such as configuring all X stuff with a
 # single command.
 
@@ -31,21 +29,17 @@
     - supervisor
     - nodejs
     - npm
+    - r-base-core
+    - r-cran-getopt
+    - r-bioc-biocinstaller
 
 # Setup atom (https://atom.io/) ppa and install.
-- name: Add custom Galaxy PPA (used for nginx package)
-  apt_repository: repo="ppa:webupd8team/atom" update_cache=yes
+- name: Add custom PPAs
+  apt_repository: repo={{ item }} update_cache=yes
   when: galaxy_devbox_include_x
-
-- name: Install the debs (X11 environment)
-  apt: name={{ item }} state=latest update_cache=yes
   with_items:
-    - atom
-    - xfce4-xkb-plugin
-    - gedit
-    - xubuntu-core
-    - firefox
-  when: galaxy_devbox_include_x
+    - "ppa:webupd8team/atom"
+    - "ppa:mystic-mirage/komodo-edit"
 
 - name: Add Google key for Chrome installation
   apt_key:
@@ -59,10 +53,16 @@
     state: present
   when: galaxy_devbox_include_x
 
-- name: Install Chrome Stable
-  apt:
-    name: google-chrome-stable
-    state: latest
+- name: Install the debs (X11 environment)
+  apt: name={{ item }} state=latest update_cache=yes
+  with_items:
+    - google-chrome-stable
+    - komodo-edit
+    - atom
+    - xfce4-xkb-plugin
+    - gedit
+    - xubuntu-core
+    - firefox
   when: galaxy_devbox_include_x
 
 - name: Ensures /etc/lightdm/lightdm.conf.d/ dir exists
@@ -77,10 +77,15 @@
   become_user: "{{ dev_user_name }}"
   shell: "ruby -e \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/linuxbrew/go/install)\""
 
+- name: Download vim extras
+  get_url: url=http://j.mp/spf13-vim3 dest={{ dev_user_home }}/vimextras.sh
+  become: True
+  become_user: "{{ dev_user_name }}"
+
 - name: Install vim extras
   become: True
   become_user: "{{ dev_user_name }}"
-  shell: "curl http://j.mp/spf13-vim3 -L -o - | sh"
+  shell: "sh {{ dev_user_home }}/vimextras.sh"
 
 - name: Tap galaxyproject recipes
   become: True
@@ -122,34 +127,17 @@
   become_user: "{{ dev_user_name }}"
   shell: "{{ dev_user_home }}/.linuxbrew/bin/brew install -v bash-completion"
 
-# TODO: MANPATH, INFOPATH
-- name: Add linuxbrew to dev users PATH
-  lineinfile: "dest={{ dev_user_shellrc }} line='export PATH={{ dev_user_home }}/.linuxbrew/bin:$PATH'"
-
-- name: Source linuxbrew bash completions
-  lineinfile: "dest={{ dev_user_shellrc }} line='. {{ dev_user_home }}/.linuxbrew/etc/bash_completion'"
-
 - name: Install the dev tools
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
     - emacs24-nox
 
-- name: Install node and npm
-  apt: name={{ item }} state=latest update_cache=yes
-  with_items:
-    - nodejs
-    - npm
-
-- name: Start supervisord on boot
-  service: name=supervisor enabled=yes
-
-- name: activate supervisor on boot, the shell way
+- name: Start supervisord on boot.
   become: True
   shell: "systemctl enable supervisor.service"
 
 - name: Link nodejs to node
-  become: True
-  shell: "ln -f -s /usr/bin/nodejs /usr/bin/node"
+  file: path=/usr/bin/node state=link src=/usr/bin/nodejs
 
 - name: Install more locales
   locale_gen: name={{ item }} state=present
@@ -181,24 +169,56 @@
   become: True
   shell: "rm -f /etc/update-motd.d/9*"
 
-- name: "Ensure that planemo-machine's environment settings are applied."
-  lineinfile: dest={{ dev_user_home }}/.bashrc line='[[ -f $HOME/.planemo-machine ]] && . $HOME/.planemo-machine'
-
 - name: "Add the local environment settings."
-  template: src=planemo-machine.sh.j2 dest={{ dev_user_home }}/.planemo-machine
-  when: galaxy_devbox_include_x
+  template: src=planemo-machine.sh.j2 dest={{ dev_user_localrc }}
+
+# TODO: INFOPATH
+- name: Update the shell environment
+  lineinfile: "{{ item }}"
+  with_items:
+    - "dest={{ dev_user_shellrc }} line='[[ -f {{ dev_user_localrc }} ]] && . {{ dev_user_localrc }}'"
+    - "dest={{ dev_user_localrc }} line='export PATH={{ dev_user_home }}/miniconda2/bin:{{ dev_user_home }}/.linuxbrew/bin:$PATH'"
+    - "dest={{ dev_user_localrc }} line='. {{ dev_user_home }}/.linuxbrew/etc/bash_completion'"
 
 - name: "Update login notifications."
   become: True
   shell: "/usr/sbin/update-motd"
 
 - name: Ensure existence of target directory for next step.
-  file: path={{ dev_user_home }}/.config/xfce4/xfconf/xfce-perchannel-xml state=directory
+  file: path={{ dev_user_home }}/.config/xfce4/xfconf/xfce-perchannel-xml state=directory owner={{ dev_user_name }} group={{ dev_user_group }}
+
+- name: Download miniconda
+  get_url: url=https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh dest={{ dev_user_home }}/Miniconda-latest-Linux-x86_64.sh
+  become: True
+  become_user: "{{ dev_user_name }}"
+
+- name: Install miniconda
+  become: True
+  become_user: "{{ dev_user_name }}"
+  shell: "bash {{ dev_user_home }}/Miniconda-latest-Linux-x86_64.sh -b"
 
 - name: "Add the keyboard layout switcher to the panel."
   template: src=xfce4-panel.xml.j2 dest={{ dev_user_home }}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
   when: galaxy_devbox_include_x
 
-- name: "Workaround for atom"
+- name: "Install R libraries"
   become: True
-  shell: "/opt/atom/atom &"
+  shell: "R -e 'library(BiocInstaller); biocLite(c(\"{{ item }}\"))'"
+  with_items:
+    - Rgraphviz
+    - motifbreakR
+
+- name: "Clean up temporary files"
+  become: True
+  file: path={{ item }} state=absent
+  with_items:
+    - "{{ dev_user_home }}/Miniconda-latest-Linux-x86_64.sh"
+    - "{{ dev_user_home }}/vimextras.sh"
+
+- name: "Autoremove apt packages"
+  become: True
+  shell: "apt-get -y autoremove"
+
+- name: "Clean the apt cache"
+  become: True
+  shell: "apt-get -y clean"

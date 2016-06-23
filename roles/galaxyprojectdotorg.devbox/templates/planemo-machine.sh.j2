@@ -1,1 +1,13 @@
 export GALAXY={{ galaxy_root }}
+
+if [[ -z $PYTHONPATH ]] ; then
+    export PYTHONPATH={{ dev_user_home }}/miniconda2/lib/python2.7
+else
+    export PYTHONPATH={{ dev_user_home }}/miniconda2/lib/python2.7:$PYTHONPATH
+fi
+
+if [[ -z $MANPATH ]] ; then
+    export MANPATH={{ dev_user_home }}/.linuxbrew/share/man
+else
+    export MANPATH={{ dev_user_home }}/.linuxbrew/share/man:$MANPATH
+fi
