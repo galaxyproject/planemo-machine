@@ -32,15 +32,15 @@
     - nodejs
     - npm
 
-# Setup atom (https://atom.io/) ppa and install.
-- name: Add custom Galaxy PPA (used for nginx package)
-  apt_repository: repo="ppa:webupd8team/atom" update_cache=yes
+# Setup komodo-edit ppa and install.
+- name: Add custom PPA (used for komodo-edit package)
+  apt_repository: repo="ppa:mystic-mirage/komodo-edit" update_cache=yes
   when: galaxy_devbox_include_x
 
 - name: Install the debs (X11 environment)
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
-    - atom
+    - komodo-edit
     - xfce4-xkb-plugin
     - gedit
     - xubuntu-core
