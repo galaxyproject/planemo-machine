@@ -31,6 +31,9 @@
     - supervisor
     - nodejs
     - npm
+    - r-base-core
+    - r-cran-getopt
+    - r-bioc-biocinstaller
 
 # Setup atom (https://atom.io/) ppa and install.
 - name: Add custom Galaxy PPA (used for atom package)
@@ -217,3 +220,10 @@
   become: True
   become_user: "{{ dev_user_name }}"
   when: galaxy_devbox_include_x
+
+- name: "Install R libraries"
+  become: True
+  shell: "R -e 'library(BiocInstaller); biocLite(c(\"{{ item }}\"))'"
+  with_items:
+    - Rgraphviz
+    - motifbreakR
