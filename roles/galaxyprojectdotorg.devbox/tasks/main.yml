@@ -32,6 +32,11 @@
     - nodejs
     - npm
 
+# Setup atom (https://atom.io/) ppa and install.
+- name: Add custom Galaxy PPA (used for nginx package)
+  apt_repository: repo="ppa:webupd8team/atom" update_cache=yes
+  when: galaxy_devbox_include_x
+
 # Setup komodo-edit ppa and install.
 - name: Add custom PPA (used for komodo-edit package)
   apt_repository: repo="ppa:mystic-mirage/komodo-edit" update_cache=yes
@@ -40,6 +45,7 @@
 - name: Install the debs (X11 environment)
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
+    - atom
     - komodo-edit
     - xfce4-xkb-plugin
     - gedit
@@ -103,6 +109,7 @@
   template: src=Desktop/{{ item }}.desktop.j2 dest={{ dev_user_home }}/Desktop/{{ item }}.desktop mode=a+x owner={{ dev_user_name }} group={{ dev_user_group }}
   when: galaxy_devbox_include_x
   with_items:
+    - atom
     - komodo-edit
     - exo-terminal-emulator
     - exo-web-browser
@@ -192,9 +199,14 @@
   become: True
   shell: "/usr/sbin/update-motd"
 
+- name: Ensure existence of .config directory
+  file: path={{ dev_user_home }}/.config/ state=directory owner={{ dev_user_name }} group={{ dev_user_group }}
+
 - name: Ensure existence of target directory for next step.
-  file: path={{ dev_user_home }}/.config/xfce4/xfconf/xfce-perchannel-xml state=directory
+  file: path={{ dev_user_home }}/.config/xfce4/xfconf/xfce-perchannel-xml state=directory owner={{ dev_user_name }} group={{ dev_user_group }}
 
 - name: "Add the keyboard layout switcher to the panel."
   template: src=xfce4-panel.xml.j2 dest={{ dev_user_home }}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
+  become: True
+  become_user: "{{ dev_user_name }}"
   when: galaxy_devbox_include_x
