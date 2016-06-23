@@ -30,7 +30,7 @@ _virtualbox: packer
 	$(PACKER_COMMAND) build -var 'include_x=true' --only virtualbox-iso packer.json
 
 virtualbox-nox: packer
-	$(PACKER_COMMAND) build --only virtualbox-iso packer.json	
+	$(PACKER_COMMAND) build --only virtualbox-iso packer.json
 
 docker: packer
 	$(DOCKER_COMMAND) build -t planemo/interactive .
@@ -53,9 +53,9 @@ docker-via-packer: packer
 _virtualbox-ova:
 	mv output-virtualbox-iso/*ovf $(IMAGE_NAME).ovf
 	mv output-virtualbox-iso/*-disk1.vmdk $(IMAGE_NAME)-disk1.vmdk
-	sed -i '/<File/c\<File ovf:href="planemo-machine-disk1.vmdk" ovf:id="file1"/>' $(IMAGE_NAME).ovf
-	sed -i '/<Clipboard/c\<Clipboard mode="Bidirectional"/>' $(IMAGE_NAME).ovf
-	sed -i "s:packer-virtualbox-iso:$(IMAGE_NAME):g" $(IMAGE_NAME).ovf
+	sed -i -e 's/<File.*/<File ovf:href="planemo-machine-disk1.vmdk" ovf:id="file1"\/>/g' $(IMAGE_NAME).ovf
+	sed -i -e 's/<Clipboard.*/<Clipboard mode="Bidirectional"\/>/g' $(IMAGE_NAME).ovf
+	sed -i -e "s:packer-virtualbox-iso:$(IMAGE_NAME):g" $(IMAGE_NAME).ovf
 	tar cvf $(IMAGE_NAME).ova $(IMAGE_NAME).ovf
 	tar uvf $(IMAGE_NAME).ova $(IMAGE_NAME)-disk1.vmdk
 
