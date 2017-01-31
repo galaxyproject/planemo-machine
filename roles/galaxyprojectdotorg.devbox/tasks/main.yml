@@ -81,7 +81,7 @@
 - name: Install linuxbrew
   become: True
   become_user: "{{ dev_user_name }}"
-  shell: "ruby -e \"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/linuxbrew/go/install)\""
+  shell: "ruby -e \"$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)\""
 
 - name: Install vim extras
   become: True
