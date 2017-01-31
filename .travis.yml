@@ -25,7 +25,13 @@ before_install:
   - sudo mkdir $PLANEMO_HOME
   - sudo chown -R $PLANEMO_TRAVIS_USER:$PLANEMO_TRAVIS_USER $PLANEMO_HOME
 
+install:
+  - pip install ansible
+
 script:
+  # Check the role/playbook's syntax.
+  - ansible-playbook -i "localhost," provision.yml --syntax-check
+  # Build the docker containers
   - docker build -t planemo/interactive .
   - cd server
   - docker build -t planemo/server .

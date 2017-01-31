@@ -21,8 +21,8 @@
       - role: galaxyprojectdotorg.galaxy-os
         tags: image
       - role: galaxyprojectdotorg.cloudman-database
-        become: True
-        become_user: postgres
+        sudo: True
+        sudo_user: postgres
         tags: database
       - role: galaxyprojectdotorg.galaxy
         become: True
