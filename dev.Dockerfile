@@ -1,8 +1,9 @@
-
 # Piece-wise variant of the Dockerfile for testing - produces larger
 # images so it is less appropriate for publishing Docker images.
 FROM toolshed/requirements:16.04
 MAINTAINER John Chilton <jmchilton@gmail.com>
+
+RUN localedef -i en_US -f UTF-8 en_US.UTF-8
 
 # Pre-install a bunch of packages to speed up ansible steps.
 RUN apt-get update -y && apt-get install -y software-properties-common && \
