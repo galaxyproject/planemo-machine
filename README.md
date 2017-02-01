@@ -6,6 +6,7 @@ A set of [packer](http://packer.io) and
 used to build [Ubuntu](http://www.ubuntu.com/) environment for
 [Galaxy](http://galaxyproject.org) tool development.
 
+[![Build Status](https://travis-ci.org/galaxyproject/planemo-machine.svg?branch=master)](https://travis-ci.org/galaxyproject/planemo-machine)
 
 Setup
 -----------------------
