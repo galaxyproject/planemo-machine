@@ -217,3 +217,7 @@
   become: True
   become_user: "{{ dev_user_name }}"
   when: galaxy_devbox_include_x
+
+- name: "Add test script to check machine."
+  template: src=check-planemo-machine.sh.j2 dest=/usr/bin/check-planemo-machine.sh mode=0755
+  become: True
