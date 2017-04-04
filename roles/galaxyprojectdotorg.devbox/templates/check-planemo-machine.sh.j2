@@ -1,0 +1,23 @@
+#/bin/sh
+
+set -e
+
+supervisorctl status galaxy:web0 | grep -q RUNNING
+
+supervisorctl status galaxy:handler0 | grep -q RUNNING
+
+supervisorctl status postgresql | grep -q RUNNING
+
+supervisorctl status slurmctld | grep -q RUNNING
+
+supervisorctl status slurmd | grep -q RUNNING
+
+supervisorctl status toolshed | grep -q RUNNING
+
+supervisorctl status munge | grep -q RUNNING
+
+supervisorctl status nginx | grep -q RUNNING
+
+## TODO: Move linuxbrew & miniconda stuff from .bashrc to .profile I guess?
+## su -l {{ dev_user_name }} /bin/bash -c 'planemo --help'
+su -l {{ dev_user_name }} /bin/bash -c '$HOME/.linuxbrew/bin/planemo --help'
