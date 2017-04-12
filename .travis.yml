@@ -33,9 +33,7 @@ script:
   - ansible-playbook -i "localhost," provision.yml --syntax-check
   # Build the docker containers
   - docker build -t planemo/interactive .
-  - cd server
-  - docker build -t planemo/server .
-  - cd ..
+  - docker build -t planemo/server server
   - |
       docker run -d -p 8080:80 \
         --name planemo \
