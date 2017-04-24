@@ -12,11 +12,13 @@ RUN apt-get update -y && apt-get install -y software-properties-common && \
             ipython libffi-dev liblapack-dev libncurses5-dev libopenblas-dev libpam0g-dev libpq-dev libsparsehash-dev \
             make mercurial nmon openssh-server patch postgresql postgresql postgresql-client postgresql-plpython-9.5 \
             python-dev python-prettytable python-psycopg2 rsync slurm-drmaa-dev swig sysstat unzip vim wget zlib1g-dev \
-            ansible build-essential git m4 ruby texinfo libbz2-dev libcurl4-openssl-dev libexpat-dev \
+            build-essential git m4 ruby texinfo libbz2-dev libcurl4-openssl-dev libexpat-dev \
             automake fail2ban fuse glusterfs-client libcurl4-openssl-dev libfuse-dev libfuse2 \
             libpcre3-dev libreadline6-dev libslurm-dev libssl-dev libtool libxml2-dev libmunge-dev \
             mime-support munge nfs-common nfs-kernel-server pkg-config postgresql-server-dev-9.5 python-pip python-tk \
             rabbitmq-server slurm-llnl xfsprogs nginx-extras nodejs npm emacs24-nox sudo libglib2.0-bin gnome-settings-daemon-schemas && \
+    pip install ansible==2.2 && \
+    # PPAs upgraded to 2.3 and broke the build. \
     apt-get autoremove -y && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ADD scripts/setup_docker.sh /tmp/setup_docker.sh
