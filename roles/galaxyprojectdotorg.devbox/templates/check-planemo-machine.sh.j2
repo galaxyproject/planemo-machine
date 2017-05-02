@@ -2,22 +2,35 @@
 
 set -e
 
+echo "Waiting for Galaxy to become available"
+: ${BIOBLEND_GALAXY_URL:="http://localhost"}
+for i in {1..40}; do curl --silent --fail "${BIOBLEND_GALAXY_URL}/api/version" && break || sleep 5; done
+
+echo "Checking supervisor galaxy web thread is running."
 supervisorctl status galaxy:web0 | grep -q RUNNING
 
+echo "Checking supervisor galaxy job handler is running."
 supervisorctl status galaxy:handler0 | grep -q RUNNING
 
+echo "Checking supervisor postgres is running."
 supervisorctl status postgresql | grep -q RUNNING
 
+echo "Checking SLURM controller is running."
 supervisorctl status slurmctld | grep -q RUNNING
 
+echo "Checking SLURM host daemon is running."
 supervisorctl status slurmd | grep -q RUNNING
 
-supervisorctl status toolshed | grep -q RUNNING
-
+echo "Checking munge is running for SLURM."
 supervisorctl status munge | grep -q RUNNING
 
+echo "Checking local tool shed is running."
+supervisorctl status toolshed | grep -q RUNNING
+
+echo "Checking NGINX is running."
 supervisorctl status nginx | grep -q RUNNING
 
+echo "Checking GIE proxy is running."
 supervisorctl status galaxy:galaxy_nodejs_proxy | grep -q RUNNING
 
 ## TODO: Move linuxbrew & miniconda stuff from .bashrc to .profile I guess?
