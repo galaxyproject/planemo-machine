@@ -79,7 +79,7 @@ planemo_machine_web_dir: "{{ galaxyFS_base_dir }}/planemo-machine-web"
 small_tool_conf: true
 small_tool_conf_path: /opt/galaxy/tool_conf.min.xml
 
-galaxy_extras_config_ie_proxy: false
+galaxy_extras_config_ie_proxy: true
 
 supervisor_postgres_database_path: "{{ galaxy_db_dir }}"
 supervisor_slurm_config_dir: "/home/{{ galaxy_user_name }}"
