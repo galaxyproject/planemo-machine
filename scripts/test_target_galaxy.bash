@@ -6,11 +6,12 @@ set -e
 : ${BIOBLEND_GALAXY_USER_EMAIL:="dev@galaxyproject.org"}
 : ${BIOBLEND_TEST_SUITE:="quick"}
 
-: ${BIOBLEND_INSTALL_TARGET:="https://github.com/jmchilton/bioblend/archive/test_fixes_for_planemo_machine.zip"}
+: ${BIOBLEND_INSTALL_TARGET:="https://github.com/galaxyproject/bioblend/archive/master.zip"}
 
 export BIOBLEND_GALAXY_MASTER_API_KEY
 export BIOBLEND_GALAXY_URL
 export BIOBLEND_TEST_SUITE
+export BIOBLEND_GALAXY_USER_EMAIL
 
 echo "Entering loop"
 
