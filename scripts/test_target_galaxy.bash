@@ -6,6 +6,8 @@ set -e
 : ${BIOBLEND_GALAXY_USER_EMAIL:="dev@galaxyproject.org"}
 : ${BIOBLEND_TEST_SUITE:="quick"}
 
+: ${BIOBLEND_INSTALL_TARGET:="https://github.com/jmchilton/bioblend/archive/test_fixes_for_planemo_machine.zip"}
+
 export BIOBLEND_GALAXY_MASTER_API_KEY
 export BIOBLEND_GALAXY_URL
 export BIOBLEND_TEST_SUITE
@@ -19,7 +21,7 @@ curl -v --fail "${BIOBLEND_GALAXY_URL}/api/version"
 VENV_DIR=`mktemp -d`
 virtualenv "$VENV_DIR"
 . "$VENV_DIR/bin/activate"
-pip install 'git+git://github.com/galaxyproject/bioblend.git' 'pytest'
+pip install "$BIOBLEND_INSTALL_TARGET" "pytest"
 echo $BIOBLEND_GALAXY_URL
 echo $BIOBLEND_GALAXY_MASTER_API_KEY
 echo $BIOBLEND_TEST_SUITE
