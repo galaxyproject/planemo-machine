@@ -32,21 +32,12 @@ script:
   # Check the role/playbook's syntax.
   - ansible-playbook -i "localhost," provision.yml --syntax-check
   # Build the docker containers
-  - docker build -t planemo/interactive .
-  - cd server
-  - docker build -t planemo/server .
-  - |
-      docker run -d -p 8080:80 \
-        --name planemo \
-        -e GALAXY_CONFIG_ALLOW_USER_DATASET_PURGE=True \
-        -e GALAXY_CONFIG_ALLOW_LIBRARY_PATH_PASTE=True \
-        -e GALAXY_CONFIG_ENABLE_USER_DELETION=True \
-        -e GALAXY_CONFIG_ENABLE_BETA_WORKFLOW_MODULES=True \
-        planemo/server
-  - sleep 180
+  - make docker
+  - make docker-server
+  - make run-test-docker-server
+  - sleep 10
   - docker ps
   - docker logs planemo
   - docker exec planemo bash /usr/bin/check-planemo-machine.sh
-  - export BIOBLEND_GALAXY_API_KEY=HSNiugRFvgT574F43jZ7N9F3
-  - export BIOBLEND_GALAXY_URL=http://localhost:8080
-  - curl -v --fail $BIOBLEND_GALAXY_URL/api/version
+  - bash scripts/test_target_galaxy.bash
+  

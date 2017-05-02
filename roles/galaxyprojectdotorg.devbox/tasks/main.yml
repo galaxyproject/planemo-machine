@@ -78,25 +78,50 @@
   template: src=10-xubuntu.conf.j2 dest=/etc/lightdm/lightdm.conf.d/10-xubuntu.conf
   when: galaxy_devbox_include_x
 
-- name: Install linuxbrew
-  become: True
-  become_user: "{{ dev_user_name }}"
-  shell: "ruby -e \"$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)\""
-
 - name: Install vim extras
   become: True
   become_user: "{{ dev_user_name }}"
   shell: "curl http://j.mp/spf13-vim3 -L -o - | sh"
 
-- name: Tap galaxyproject recipes
-  become: True
+# - name: Install linuxbrew
+#   become: True
+#   become_user: "{{ dev_user_name }}"
+#   shell: "ruby -e \"$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)\""
+
+# - name: Tap galaxyproject recipes
+#   become: True
+#   become_user: "{{ dev_user_name }}"
+#   shell: "{{ dev_user_home }}//.linuxbrew/bin/brew tap galaxyproject/tap"
+
+# - name: Install planemo
+#   become: True
+#   become_user: "{{ dev_user_name }}"
+#   shell: "{{ dev_user_home }}/.linuxbrew/bin/brew install -v planemo"
+
+# - name: Install linuxbrew bash completion stuff
+#   become: True
+#   become_user: "{{ dev_user_name }}"
+#   shell: "{{ dev_user_home }}/.linuxbrew/bin/brew install -v bash-completion"
+
+# # TODO: MANPATH, INFOPATH
+# - name: Add linuxbrew to dev users PATH
+#   lineinfile: "dest={{ dev_user_shellrc }} line='export PATH={{ dev_user_home }}/.linuxbrew/bin:$PATH'"
+
+# - name: Source linuxbrew bash completions
+#   lineinfile: "dest={{ dev_user_shellrc }} line='. {{ dev_user_home }}/.linuxbrew/etc/bash_completion'"
+
+- name: Setup planemo virtualenv
+  become: True 
   become_user: "{{ dev_user_name }}"
-  shell: "{{ dev_user_home }}//.linuxbrew/bin/brew tap galaxyproject/tap"
+  shell: "virtualenv {{ dev_planemo_virtualenv }}"
 
 - name: Install planemo
-  become: True
+  become: True 
   become_user: "{{ dev_user_name }}"
-  shell: "{{ dev_user_home }}/.linuxbrew/bin/brew install -v planemo"
+  shell: ". {{ dev_planemo_virtualenv }}/bin/activate && pip install planemo"
+
+- name: Setup planemo virtualenv on PATH
+  lineinfile: "dest={{ dev_user_shellrc }} line='export PATH=$PATH:{{ dev_planemo_virtualenv }}/bin'"
 
 - name: Setup .planemo.yml
   template: src=planemo.yml.j2 dest={{ dev_user_home }}/.planemo.yml owner={{ dev_user_name }} group={{ dev_user_group }}
@@ -123,18 +148,6 @@
 - name: Configure Desktop link to development tools.
   file: src={{ dev_tool_conf_dir }} dest={{ dev_user_home }}/Desktop/tools state=link owner={{ dev_user_name }} group={{ dev_user_group }} force=true
   when: galaxy_devbox_include_x
-
-- name: Install linuxbrew bash completion stuff
-  become: True
-  become_user: "{{ dev_user_name }}"
-  shell: "{{ dev_user_home }}/.linuxbrew/bin/brew install -v bash-completion"
-
-# TODO: MANPATH, INFOPATH
-- name: Add linuxbrew to dev users PATH
-  lineinfile: "dest={{ dev_user_shellrc }} line='export PATH={{ dev_user_home }}/.linuxbrew/bin:$PATH'"
-
-- name: Source linuxbrew bash completions
-  lineinfile: "dest={{ dev_user_shellrc }} line='. {{ dev_user_home }}/.linuxbrew/etc/bash_completion'"
 
 - name: Install the dev tools
   apt: name={{ item }} state=latest update_cache=yes
