@@ -2,9 +2,14 @@
 
 set -e
 
-echo "Waiting for Galaxy to become available"
+echo "Waiting for Galaxy to become available."
 : ${BIOBLEND_GALAXY_URL:="http://localhost"}
 for i in {1..40}; do curl --silent --fail "${BIOBLEND_GALAXY_URL}/api/version" && break || sleep 5; done
+echo "Waiting for all supervisord process to leave STARTING state."
+for i in {1..40}; do ! $(supervisorctl status | grep -q STARTING) && break || sleep 5; done
+
+echo "Supervisord managed processes"
+supervisorctl status
 
 echo "Checking supervisor galaxy web thread is running."
 supervisorctl status galaxy:web0 | grep -q RUNNING
