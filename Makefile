@@ -52,12 +52,12 @@ docker-via-packer: packer
 
 _virtualbox-ova:
 	mv output-virtualbox-iso/*ovf $(IMAGE_NAME).ovf
-	mv output-virtualbox-iso/*-disk1.vmdk $(IMAGE_NAME)-disk1.vmdk
-	sed -i -e 's/<File.*/<File ovf:href="planemo-machine-disk1.vmdk" ovf:id="file1"\/>/g' $(IMAGE_NAME).ovf
+	mv output-virtualbox-iso/*-disk001.vmdk $(IMAGE_NAME)-disk001.vmdk
+	sed -i -e 's/<File.*/<File ovf:href="planemo-machine-disk001.vmdk" ovf:id="file1"\/>/g' $(IMAGE_NAME).ovf
 	sed -i -e 's/<Clipboard.*/<Clipboard mode="Bidirectional"\/>/g' $(IMAGE_NAME).ovf
 	sed -i -e "s:packer-virtualbox-iso:$(IMAGE_NAME):g" $(IMAGE_NAME).ovf
 	tar cvf $(IMAGE_NAME).ova $(IMAGE_NAME).ovf
-	tar uvf $(IMAGE_NAME).ova $(IMAGE_NAME)-disk1.vmdk
+	tar uvf $(IMAGE_NAME).ova $(IMAGE_NAME)-disk001.vmdk
 
 # Convert the VirtualBox Image into a Qemu Image for use in OpenStack
 _create_qemu_image: packer
