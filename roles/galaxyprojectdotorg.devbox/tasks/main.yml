@@ -53,6 +53,10 @@
     - firefox
   when: galaxy_devbox_include_x
 
+- name: Remove light-locker to disable screen locking in VM.
+  apt: name=light-locker state=absent update_cache=yes
+  when: galaxy_devbox_include_x
+
 - name: Add Google key for Chrome installation
   apt_key:
     url: https://dl.google.com/linux/linux_signing_key.pub
@@ -149,6 +153,14 @@
   file: src={{ dev_tool_conf_dir }} dest={{ dev_user_home }}/Desktop/tools state=link owner={{ dev_user_name }} group={{ dev_user_group }} force=true
   when: galaxy_devbox_include_x
 
+- name: Configure Desktop link to Galaxy web log.
+  file: src={{ uwsgi_log if galaxy_uwsgi else galaxy_log_dir + "/galaxy_web0.log" }} dest="{{ dev_user_home }}/Desktop/Galaxy Web Process.log" state=link owner={{ dev_user_name }} group={{ dev_user_group }} force=true
+  when: galaxy_devbox_include_x
+
+- name: Configure Desktop link to Galaxy handler log.
+  file: src={{ galaxy_log_dir }}/handler0.log dest="{{ dev_user_home }}/Desktop/Galaxy Job Handler.log" state=link owner={{ dev_user_name }} group={{ dev_user_group }} force=true
+  when: galaxy_devbox_include_x
+
 - name: Install the dev tools
   apt: name={{ item }} state=latest update_cache=yes
   with_items:
@@ -214,22 +226,33 @@
 - name: Ensure existence of .config directory
   file: path={{ dev_user_home }}/.config/ state=directory owner={{ dev_user_name }} group={{ dev_user_group }}
 
-- name: Ensure existence of target directory for next step.
+- name: Ensure existence of xfconf directory for next step.
   file: path={{ dev_user_home }}/.config/xfce4/xfconf/xfce-perchannel-xml state=directory owner={{ dev_user_name }} group={{ dev_user_group }}
-
-- name: Download miniconda
-  become: True
-  become_user: "{{ dev_user_name }}"
-  shell: "cd {{ dev_user_home }} && curl https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -L -o miniconda.sh && bash miniconda.sh -b"
-
-- name: Add miniconda bin to PATH.
-  lineinfile: "dest={{ dev_user_shellrc }} line='export PATH=$PATH:{{ dev_user_home }}/miniconda2/bin/'"
+  when: galaxy_devbox_include_x
 
 - name: "Add the keyboard layout switcher to the panel."
   template: src=xfce4-panel.xml.j2 dest={{ dev_user_home }}/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
   become: True
   become_user: "{{ dev_user_name }}"
   when: galaxy_devbox_include_x
+
+- name: Ensure existence of xfce4-terminal config directory for next step.
+  file: path={{ dev_user_home }}/.config/xfce4/terminal state=directory owner={{ dev_user_name }} group={{ dev_user_group }}
+  when: galaxy_devbox_include_x
+
+- name: "Add a xfce4-terminal configuration for this VM"
+  template: src=xfce4-panel.xml.j2 dest={{ dev_user_home }}/.config/xfce4/terminal/terminalrc
+  become: True
+  become_user: "{{ dev_user_name }}"
+  when: galaxy_devbox_include_x
+
+- name: Download and install Miniconda 3
+  become: True
+  become_user: "{{ dev_user_name }}"
+  shell: "{{ dev_planemo_virtualenv }}/bin/planemo conda_init"
+
+- name: Add Miniconda 3 bin to PATH.
+  lineinfile: "dest={{ dev_user_shellrc }} line='export PATH=$PATH:{{ dev_user_home }}/miniconda3/bin/'"
 
 - name: "Add test script to check machine."
   template: src=check-planemo-machine.sh.j2 dest=/usr/bin/check-planemo-machine.sh mode=0755
