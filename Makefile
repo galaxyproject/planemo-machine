@@ -35,11 +35,17 @@ virtualbox-nox: packer
 docker: packer
 	$(DOCKER_COMMAND) build -t planemo/interactive .
 
+docker-x: packer
+	$(DOCKER_COMMAND) build --build-arg INCLUDE_X=true -t planemo/interactive:x .
+
 docker-dev: packer
 	$(DOCKER_COMMAND) build -t planemo/interactive-dev -f dev.Dockerfile .
 
 docker-server: packer
 	$(DOCKER_COMMAND) build -t planemo/server server
+
+docker-server-x: packer
+	$(DOCKER_COMMAND) build --build-arg INCLUDE_X=true -t planemo/server:x server
 
 docker-server-dev: packer
 	$(DOCKER_COMMAND) build -t planemo/server-dev -f dev.server.Dockerfile .
@@ -74,3 +80,11 @@ run-test-docker-server:
          -e GALAXY_CONFIG_ENABLE_USER_DELETION=True \
          -e GALAXY_CONFIG_ENABLE_BETA_WORKFLOW_MODULES=True \
          planemo/server
+
+run-test-docker-server-x:
+	docker run -d -p 8080:80 --name planemo \
+         -e GALAXY_CONFIG_ALLOW_USER_DATASET_PURGE=True \
+         -e GALAXY_CONFIG_ALLOW_LIBRARY_PATH_PASTE=True \
+         -e GALAXY_CONFIG_ENABLE_USER_DELETION=True \
+         -e GALAXY_CONFIG_ENABLE_BETA_WORKFLOW_MODULES=True \
+         planemo/server:x

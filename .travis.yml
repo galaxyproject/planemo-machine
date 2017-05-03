@@ -4,7 +4,9 @@ python: 2.7
 services:
   - docker
 env:
-  - TOX_ENV=py27
+  matrix:
+    - INCLUDE_X=false
+    - INCLUDE_X=true
 git:
   submodules: false
 
@@ -32,9 +34,16 @@ script:
   # Check the role/playbook's syntax.
   - ansible-playbook -i "localhost," provision.yml --syntax-check
   # Build the docker containers
-  - make docker
-  - make docker-server
-  - make run-test-docker-server
+  - |
+    if [ "$INCLUDE_X" == "true" ]
+    then
+      SUFFIX="-x"
+    else
+      SUFFIX=""
+    fi
+  - make docker$SUFFIX
+  - make docker-server$SUFFIX
+  - make run-test-docker-server$SUFFIX
   - sleep 10
   - docker ps
   - docker logs planemo
