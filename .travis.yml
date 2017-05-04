@@ -44,9 +44,5 @@ script:
   - make docker$SUFFIX
   - make docker-server$SUFFIX
   - make run-test-docker-server$SUFFIX
-  - sleep 10
-  - docker ps
-  - docker logs planemo
-  - docker exec planemo bash /usr/bin/check-planemo-machine.sh
-  - bash scripts/test_target_galaxy.bash
-  
+  - sleep 5
+  - make check-test-server

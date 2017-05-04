@@ -82,9 +82,15 @@ run-test-docker-server:
          planemo/server
 
 run-test-docker-server-x:
-	docker run -d -p 8080:80 --rm --name planemo  \
+	docker run -d -p 8080:80 --rm --name planemo \
          -e GALAXY_CONFIG_ALLOW_USER_DATASET_PURGE=True \
          -e GALAXY_CONFIG_ALLOW_LIBRARY_PATH_PASTE=True \
          -e GALAXY_CONFIG_ENABLE_USER_DELETION=True \
          -e GALAXY_CONFIG_ENABLE_BETA_WORKFLOW_MODULES=True \
          planemo/server:x
+
+check-test-server:
+	docker ps
+	docker logs planemo
+	docker exec planemo bash /usr/bin/check-planemo-machine.sh
+	bash scripts/test_target_galaxy.bash
