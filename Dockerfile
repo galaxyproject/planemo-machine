@@ -1,6 +1,8 @@
 FROM toolshed/requirements:16.04
 MAINTAINER John Chilton <jmchilton@gmail.com>
 
+ARG INCLUDE_X=false
+
 # Pre-install a bunch of packages to speed up ansible steps.
 RUN apt-get update -y && apt-get install -y software-properties-common && \
     apt-add-repository -y ppa:ansible/ansible && apt-add-repository -y ppa:m-vandenbeek/nginx-upload-store && \
@@ -37,7 +39,7 @@ ADD group_vars/all /tmp/ansible/vars.yml
 ADD roles/ /tmp/ansible/roles
 ADD playbook/templates/ /tmp/ansible/templates
 ADD provision.yml /tmp/ansible/provision.yml
-ENV ANSIBLE_EXTRA_VARS="--extra-vars galaxy_user_name=ubuntu --extra-vars galaxy_docker_sudo=true --extra-vars docker_package=docker-engine --extra-vars startup_chown_on_directory=/opt/galaxy/tools"
+ENV ANSIBLE_EXTRA_VARS="--extra-vars galaxy_user_name=ubuntu --extra-vars galaxy_docker_sudo=true --extra-vars docker_package=docker-engine --extra-vars startup_chown_on_directory=/opt/galaxy/tools --extra-vars galaxy_devbox_include_x=$INCLUDE_X"
 RUN ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml --tags=image        -c local -e "@vars.yml" $ANSIBLE_EXTRA_VARS && \
     ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml --tags=database     -c local -e "@vars.yml" $ANSIBLE_EXTRA_VARS && \
     ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provision.yml --tags=galaxy       -c local -e "@vars.yml" $ANSIBLE_EXTRA_VARS && \

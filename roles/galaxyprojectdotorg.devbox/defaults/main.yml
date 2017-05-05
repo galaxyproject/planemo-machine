@@ -1,8 +1,6 @@
-codebox_path: "/opt/galaxy/codebox"
-codebox_port: 8991
-
-codebox_version: 0.8.3
-
 small_tool_conf: no
 
 galaxy_devbox_include_x: false
+
+galaxy_devbox_terminal_font: "DejaVu Sans Mono"
+galaxy_devbox_terminal_font_size: 14

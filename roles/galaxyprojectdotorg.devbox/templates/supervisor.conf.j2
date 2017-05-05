@@ -1,7 +1,0 @@
-[program:codebox]
-directory       = {{ codebox_path }}
-command         = /bin/bash -c 'export HOME=/home/{{ galaxy_user_name }};  export PORT={{ codebox_port }}; export WORKSPACE_DIR={{ dev_tool_conf_dir }}; node {{ codebox_path }}/node_modules/codebox/bin/codebox.js run'
-autostart       = true
-autorestart     = true
-user            = {{ galaxy_user_name }}
-redirect_stderr = true

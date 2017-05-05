@@ -35,6 +35,7 @@ galaxy_config_dir: "{{ galaxy_server_dir }}/config"
 galaxy_config_file: "{{ galaxy_config_dir }}/galaxy.ini"
 postgresql_version: 9.5
 postgresql_bin_dir: /usr/lib/postgresql/{{ postgresql_version }}/bin
+supervisor_postgres_config_path: "{{ galaxy_db_dir }}/postgresql.conf"
 
 galaxy_shed_tools_dir: "{{ galaxyFS_base_dir }}/shed_tools"
 len_file_path: "{{ galaxyFS_base_dir }}/configuration_data/len"
