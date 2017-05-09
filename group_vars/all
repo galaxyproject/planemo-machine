@@ -19,8 +19,8 @@ dev_planemo_virtualenv: "{{ dev_user_home }}/planemo-virtualenv"
 
 galaxy_vcs: git
 galaxy_git_repo: https://github.com/galaxyproject/galaxy.git
-galaxy_changeset_id: release_17.01
-galaxy_download_url: https://codeload.github.com/galaxyproject/galaxy/tar.gz/release_17.01
+galaxy_changeset_id: release_17.05
+galaxy_download_url: https://codeload.github.com/galaxyproject/galaxy/tar.gz/release_17.05
 
 galaxy_manage_clone: no
 galaxy_manage_download: yes
@@ -84,9 +84,11 @@ galaxy_extras_config_ie_proxy: true
 
 supervisor_postgres_database_path: "{{ galaxy_db_dir }}"
 supervisor_slurm_config_dir: "/home/{{ galaxy_user_name }}"
+
+supervisor_manage_ie_proxy: true
+
 # Disable management/user features for devbox.
 supervisor_manage_reports: false
-supervisor_manage_nodeproxy: false
 supervisor_manage_proftp: false
 supervisor_manage_docker: false
 supervisor_manage_toolshed: "{{ manage_toolshed }}"
