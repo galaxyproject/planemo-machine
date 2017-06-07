@@ -57,6 +57,13 @@
   apt: name=light-locker state=absent update_cache=yes
   when: galaxy_devbox_include_x
 
+- name: Remove duplicated indicator services between XUbuntu and base image.
+  apt: name={{ item }} state=absent update_cache=yes
+  with_items:
+    - indicator-datetime
+    - indicator-power
+  when: galaxy_devbox_include_x
+
 - name: Add Google key for Chrome installation
   apt_key:
     url: https://dl.google.com/linux/linux_signing_key.pub
