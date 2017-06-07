@@ -14,8 +14,10 @@ supervisorctl status
 echo "Checking supervisor galaxy web thread is running."
 supervisorctl status galaxy:web0 | grep -q RUNNING
 
+{% if galaxy_handler_processes > 0 %}
 echo "Checking supervisor galaxy job handler is running."
 supervisorctl status galaxy:handler0 | grep -q RUNNING
+{% endif %}
 
 echo "Checking supervisor postgres is running."
 supervisorctl status postgresql | grep -q RUNNING
