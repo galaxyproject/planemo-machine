@@ -57,6 +57,13 @@
   apt: name=light-locker state=absent update_cache=yes
   when: galaxy_devbox_include_x
 
+- name: Remove duplicated indicator services between XUbuntu and base image.
+  apt: name={{ item }} state=absent update_cache=yes
+  with_items:
+    - indicator-datetime
+    - indicator-power
+  when: galaxy_devbox_include_x
+
 - name: Add Google key for Chrome installation
   apt_key:
     url: https://dl.google.com/linux/linux_signing_key.pub
@@ -253,6 +260,9 @@
 
 - name: Add Miniconda 3 bin to PATH.
   lineinfile: "dest={{ dev_user_shellrc }} line='export PATH=$PATH:{{ dev_user_home }}/miniconda3/bin/'"
+
+- name: Shorten bash prompt.
+  lineinfile: "dest={{ dev_user_shellrc }} line='{{ dev_command_prompt }}'"
 
 - name: "Add test script to check machine."
   template: src=check-planemo-machine.sh.j2 dest=/usr/bin/check-planemo-machine.sh mode=0755

@@ -16,6 +16,8 @@ dev_user_group: "{{ galaxy_user_name }}"
 dev_user_home: "/home/{{ dev_user_name }}"
 dev_user_shellrc: "{{ dev_user_home }}/.bashrc"
 dev_planemo_virtualenv: "{{ dev_user_home }}/planemo-virtualenv"
+dev_command_prompt: >-
+    PS1='\w\$ '
 
 galaxy_vcs: git
 galaxy_git_repo: https://github.com/galaxyproject/galaxy.git
@@ -51,7 +53,7 @@ galaxy_extras_config_proftpd: false
 # Auto login this user....
 galaxy_admin_user: "dev@galaxyproject.org"
 
-# Turn of uwsgi for now - doesn't work with tool reloading.
+# Turn off uwsgi for now - doesn't work with tool reloading.
 galaxy_uwsgi: false
 galaxy_web_processes: 1
 galaxy_handler_processes: 0
@@ -86,6 +88,7 @@ supervisor_postgres_database_path: "{{ galaxy_db_dir }}"
 supervisor_slurm_config_dir: "/home/{{ galaxy_user_name }}"
 
 supervisor_manage_ie_proxy: true
+supervisor_ie_proxy_autostart: true
 
 # Disable management/user features for devbox.
 supervisor_manage_reports: false
@@ -134,6 +137,7 @@ galaxy_config:
     "allow_user_deletion": "True"
     "master_api_key": "{{ galaxy_master_api_key }}"
     "tool_sheds_config_file": "{{ galaxy_config_dir }}/tool_sheds_conf.xml"
+    "interactive_environment_plugins_directory": "config/plugins/interactive_environments"
   "uwsgi":
     "socket": "127.0.0.1:4001"
     "stats": "127.0.0.1:9191"
