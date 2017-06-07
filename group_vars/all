@@ -16,7 +16,8 @@ dev_user_group: "{{ galaxy_user_name }}"
 dev_user_home: "/home/{{ dev_user_name }}"
 dev_user_shellrc: "{{ dev_user_home }}/.bashrc"
 dev_planemo_virtualenv: "{{ dev_user_home }}/planemo-virtualenv"
-dev_command_prompt: "PS1='\w\$ '"
+dev_command_prompt: >-
+    PS1='\w\$ '
 
 galaxy_vcs: git
 galaxy_git_repo: https://github.com/galaxyproject/galaxy.git
