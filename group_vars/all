@@ -35,6 +35,9 @@ psql_galaxyftp_password: devboxpass
 
 galaxy_config_dir: "{{ galaxy_server_dir }}/config"
 galaxy_config_file: "{{ galaxy_config_dir }}/galaxy.ini"
+
+galaxy_errordocs_dest: "/usr/share/nginx/errors"
+
 postgresql_version: 9.5
 postgresql_bin_dir: /usr/lib/postgresql/{{ postgresql_version }}/bin
 supervisor_postgres_config_path: "{{ galaxy_db_dir }}/postgresql.conf"
