@@ -53,7 +53,7 @@ RUN ANSIBLE_FORCE_COLOR=1 PYTHONUNBUFFERED=1 ansible-playbook /tmp/ansible/provi
 ADD scripts/cleanup.sh /tmp/cleanup.sh
 RUN sh /tmp/cleanup.sh
 
-WORKDIR /
+WORKDIR /home/ubuntu
 
 EXPOSE 80
 EXPOSE 9009

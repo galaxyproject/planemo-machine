@@ -43,3 +43,7 @@ supervisorctl status galaxy:galaxy_nodejs_proxy | grep -q RUNNING
 ## TODO: Move linuxbrew & miniconda stuff from .bashrc to .profile I guess?
 ## su -l {{ dev_user_name }} /bin/bash -c 'planemo --help'
 su -l {{ dev_user_name }} /bin/bash -c '{{ dev_planemo_virtualenv }}/bin/planemo --help'
+
+## TODO: Check Conda in the future.
+# echo "Checking if Docker is running."
+# docker ps
