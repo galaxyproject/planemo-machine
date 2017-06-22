@@ -1,7 +1,9 @@
 PACKER_COMMAND=packer
 DOCKER_COMMAND=docker
+DOCKER_PRIVILEGED=true
 TEST_FOLDER=test
 IMAGE_NAME=planemo-machine
+CONTAINER_NAME=planemo
 
 # Location of virtualenv used for development.
 VENV=.venv
@@ -74,7 +76,8 @@ virtualbox: _virtualbox _virtualbox-ova
 qemu: _virtualbox _virtualbox-ova _create_qemu_image
 
 run-test-docker-server:
-	docker run -d -p 8080:80 --rm --name planemo \
+	docker run -d -p 8080:80 --rm --name "$(CONTAINER_NAME)" \
+         --privileged="$(DOCKER_PRIVILEGED)" \
          -e GALAXY_CONFIG_ALLOW_USER_DATASET_PURGE=True \
          -e GALAXY_CONFIG_ALLOW_LIBRARY_PATH_PASTE=True \
          -e GALAXY_CONFIG_ENABLE_USER_DELETION=True \
@@ -82,7 +85,8 @@ run-test-docker-server:
          planemo/server
 
 run-test-docker-server-x:
-	docker run -d -p 8080:80 --rm --name planemo \
+	docker run -d -p 8080:80 --rm --name "$(CONTAINER_NAME)" \
+         --privileged="$(DOCKER_PRIVILEGED)" \
          -e GALAXY_CONFIG_ALLOW_USER_DATASET_PURGE=True \
          -e GALAXY_CONFIG_ALLOW_LIBRARY_PATH_PASTE=True \
          -e GALAXY_CONFIG_ENABLE_USER_DELETION=True \
@@ -91,6 +95,6 @@ run-test-docker-server-x:
 
 check-test-server:
 	docker ps
-	docker logs planemo
-	docker exec planemo bash /usr/bin/check-planemo-machine.sh
+	docker logs "$(CONTAINER_NAME)"
+	docker exec "$(CONTAINER_NAME)" bash /usr/bin/check-planemo-machine.sh
 	bash scripts/test_target_galaxy.bash
