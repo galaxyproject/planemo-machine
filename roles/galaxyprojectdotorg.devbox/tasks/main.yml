@@ -258,6 +258,11 @@
   become_user: "{{ dev_user_name }}"
   shell: "{{ dev_planemo_virtualenv }}/bin/planemo conda_init"
 
+- name: Preconfigure mulled building
+  become: True
+  become_user: "{{ dev_user_name }}"
+  shell: "{{ dev_planemo_virtualenv }}/bin/planemo mulled_init"
+
 - name: "Build a package with Conda build to ensure build tools are available in image (reduce tutorial download requirements)."
   become: True
   become_user: "{{ dev_user_name }}"
