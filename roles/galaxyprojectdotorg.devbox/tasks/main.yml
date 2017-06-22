@@ -258,6 +258,11 @@
   become_user: "{{ dev_user_name }}"
   shell: "{{ dev_planemo_virtualenv }}/bin/planemo conda_init"
 
+- name: "Build a package with Conda build to ensure build tools are available in image (reduce tutorial download requirements)."
+  become: True
+  become_user: "{{ dev_user_name }}"
+  shell: "git clone https://github.com/bioconda/bioconda-recipes /tmp/bioconda; cd /tmp/bioconda/recipes; {{ dev_user_home }}/miniconda3/bin/conda build bamtools/2.3.0; cd; rm -rf /tmp/bioconda"
+
 - name: Add Miniconda 3 bin to PATH.
   lineinfile: "dest={{ dev_user_shellrc }} line='export PATH=$PATH:{{ dev_user_home }}/miniconda3/bin/'"
 
