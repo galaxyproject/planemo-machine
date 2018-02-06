@@ -21,8 +21,8 @@ dev_command_prompt: >-
 
 galaxy_vcs: git
 galaxy_git_repo: https://github.com/galaxyproject/galaxy.git
-galaxy_changeset_id: release_17.05
-galaxy_download_url: https://codeload.github.com/galaxyproject/galaxy/tar.gz/release_17.05
+galaxy_changeset_id: release_17.09
+galaxy_download_url: https://codeload.github.com/galaxyproject/galaxy/tar.gz/release_17.09
 
 galaxy_manage_clone: no
 galaxy_manage_download: yes

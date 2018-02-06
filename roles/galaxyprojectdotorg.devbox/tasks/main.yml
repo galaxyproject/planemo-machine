@@ -122,12 +122,12 @@
 #   lineinfile: "dest={{ dev_user_shellrc }} line='. {{ dev_user_home }}/.linuxbrew/etc/bash_completion'"
 
 - name: Setup planemo virtualenv
-  become: True 
+  become: True
   become_user: "{{ dev_user_name }}"
   shell: "virtualenv {{ dev_planemo_virtualenv }}"
 
 - name: Install planemo
-  become: True 
+  become: True
   become_user: "{{ dev_user_name }}"
   shell: ". {{ dev_planemo_virtualenv }}/bin/activate && pip install planemo"
 
@@ -137,11 +137,11 @@
 - name: Setup .planemo.yml
   template: src=planemo.yml.j2 dest={{ dev_user_home }}/.planemo.yml owner={{ dev_user_name }} group={{ dev_user_group }}
 
-- name: Configure Destop directory.
+- name: Configure Desktop directory.
   file: path={{ dev_user_home }}/Desktop state=directory  owner={{ dev_user_name }} group={{ dev_user_group }}
   when: galaxy_devbox_include_x
 
-- name: Configure Destop shortcuts.
+- name: Configure Desktop shortcuts.
   template: src=Desktop/{{ item }}.desktop.j2 dest={{ dev_user_home }}/Desktop/{{ item }}.desktop mode=a+x owner={{ dev_user_name }} group={{ dev_user_group }}
   when: galaxy_devbox_include_x
   with_items:
@@ -277,3 +277,8 @@
 - name: "Add test script to check machine."
   template: src=check-planemo-machine.sh.j2 dest=/usr/bin/check-planemo-machine.sh mode=0755
   become: True
+
+- name: Install CircleCI client
+  become: True
+  become_user: root
+  shell: "curl -o /usr/local/bin/circleci https://circle-downloads.s3.amazonaws.com/releases/build_agent_wrapper/circleci && chmod +x /usr/local/bin/circleci"
