@@ -1,6 +1,4 @@
 ---
-# TODO: replace unneeded sudo and sudo_user attributes with user and group
-# permissions
 # TODO: break into smaller tasks - such as configuring all X stuff with a
 # single command.
 
@@ -28,12 +26,9 @@
     - update-motd
     - vim
     - emacs24-nox
-    - supervisor
-    - nodejs
-    - npm
 
 # Setup atom (https://atom.io/) ppa and install.
-- name: Add custom Galaxy PPA (used for atom package)
+- name: Add custom PPA (used for atom package)
   apt_repository: repo="ppa:webupd8team/atom" update_cache=yes
   when: galaxy_devbox_include_x
 
@@ -173,22 +168,12 @@
   with_items:
     - emacs24-nox
 
-- name: Install node and npm
-  apt: name={{ item }} state=latest update_cache=yes
-  with_items:
-    - nodejs
-    - npm
-
 - name: Start supervisord on boot
   service: name=supervisor enabled=yes
 
 - name: activate supervisor on boot, the shell way
   become: True
   shell: "systemctl enable supervisor.service"
-
-- name: Link nodejs to node
-  become: True
-  shell: "ln -f -s /usr/bin/nodejs /usr/bin/node"
 
 - name: Install more locales
   locale_gen: name={{ item }} state=present
