@@ -14,16 +14,4 @@ install:
 script:
   # Check the role/playbook's syntax.
   - ansible-playbook -i "localhost," provision.yml --syntax-check
-  # Build the docker containers
-  - |
-    if [ "$INCLUDE_X" == "true" ]
-    then
-      SUFFIX="-x"
-    else
-      SUFFIX=""
-    fi
-  - make docker$SUFFIX
-  - make docker-server$SUFFIX
-  - make run-test-docker-server$SUFFIX
-  - sleep 5
-  - make check-test-server
+  - bash ci_test.sh
