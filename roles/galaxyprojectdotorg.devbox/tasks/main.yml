@@ -37,14 +37,18 @@
   apt_repository: repo="ppa:mystic-mirage/komodo-edit" update_cache=yes
   when: galaxy_devbox_include_x
 
-- name: Install the debs (X11 environment)
-  apt: name={{ item }} state=latest update_cache=yes
+- name: Install X11 environment debs
+  apt: name={{ item }} state=latest
+  with_items:
+    - xubuntu-core
+
+- name: Install X11 environment development debs
+  apt: name={{ item }} state=latest
   with_items:
     - atom
     - komodo-edit
     - xfce4-xkb-plugin
     - gedit
-    - xubuntu-core
     - firefox
   when: galaxy_devbox_include_x
 
