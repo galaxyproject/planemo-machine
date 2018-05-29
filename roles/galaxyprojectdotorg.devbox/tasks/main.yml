@@ -125,10 +125,10 @@
   become_user: "{{ dev_user_name }}"
   shell: "virtualenv {{ dev_planemo_virtualenv }}"
 
-- name: Install planemo
+- name: Install planemo and optional dependencies
   become: True
   become_user: "{{ dev_user_name }}"
-  shell: ". {{ dev_planemo_virtualenv }}/bin/activate && pip install planemo"
+  shell: ". {{ dev_planemo_virtualenv }}/bin/activate && pip install toil && pip install planemo"
 
 - name: Setup planemo virtualenv on PATH
   lineinfile: "dest={{ dev_user_shellrc }} line='export PATH=$PATH:{{ dev_planemo_virtualenv }}/bin'"
