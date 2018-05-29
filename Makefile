@@ -14,8 +14,8 @@ init:
 	git submodule init && git submodule update
 
 setup-venv:
-	if [ -f $(VENV) ]; then virtualenv $(VENV); fi;
-	$(IN_VENV) pip install -r requirements.txt && pip install -r dev-requirements.txt
+	if [ ! -f $(VENV) ]; then virtualenv $(VENV); fi;
+	$(IN_VENV) pip install -r requirements.txt
 
 packer:
 	$(IN_VENV) python yaml-to-json.py --force packer.yaml
