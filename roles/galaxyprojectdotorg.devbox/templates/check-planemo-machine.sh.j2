@@ -1,4 +1,4 @@
-#/bin/sh
+#/bin/bash
 
 set -e
 
@@ -40,9 +40,16 @@ supervisorctl status nginx | grep -q RUNNING
 echo "Checking GIE proxy is running."
 supervisorctl status galaxy:galaxy_nodejs_proxy | grep -q RUNNING
 
-## TODO: Move linuxbrew & miniconda stuff from .bashrc to .profile I guess?
+## TODO: Move miniconda stuff from .bashrc to .profile I guess?
 ## su -l {{ dev_user_name }} /bin/bash -c 'planemo --help'
 su -l {{ dev_user_name }} /bin/bash -c '{{ dev_planemo_virtualenv }}/bin/planemo --help'
+
+DOC_TEST_RUNNER="https://raw.githubusercontent.com/galaxyproject/planemo/master/scripts/run_doc_test.sh"
+curl -s "$DOC_TEST_RUNNER" > /tmp/run_doc_test.sh
+su -l {{ dev_user_name }} /bin/bash -c "PLANEMO_VIRTUAL_ENV={{ dev_planemo_virtualenv }} DOCS=building bash /tmp/run_doc_test.sh"
+su -l {{ dev_user_name }} /bin/bash -c "PLANEMO_VIRTUAL_ENV={{ dev_planemo_virtualenv }} DOCS=building_cwl bash /tmp/run_doc_test.sh"
+su -l {{ dev_user_name }} /bin/bash -c "PLANEMO_VIRTUAL_ENV={{ dev_planemo_virtualenv }} DOCS=conda bash /tmp/run_doc_test.sh"
+su -l {{ dev_user_name }} /bin/bash -c "PLANEMO_VIRTUAL_ENV={{ dev_planemo_virtualenv }} DOCS=conda_cwl bash /tmp/run_doc_test.sh"
 
 ## TODO: Check Conda in the future.
 # echo "Checking if Docker is running."
