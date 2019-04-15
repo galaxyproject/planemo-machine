@@ -30,7 +30,7 @@
   "builders": [
     {
       "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso", 
-      "iso_url": "http://releases.ubuntu.com/16.04/ubuntu-16.04.3-server-amd64.iso", 
+      "iso_url": "http://releases.ubuntu.com/16.04/ubuntu-16.04.6-server-amd64.iso", 
       "ssh_port": 22, 
       "ssh_username": "{{ user `username` }}", 
       "iso_checksum_type": "sha256", 
@@ -83,7 +83,7 @@
       ], 
       "guest_os_type": "Ubuntu_64", 
       "name": "virtualbox-iso", 
-      "iso_checksum": "a06cd926f5855d4f21fb4bc9978a35312f815fbda0d0ef7fdc846861f4fc4600", 
+      "iso_checksum": "16afb1375372c57471ea5e29803a89a5a6bd1f6aabea2e5e34ac1ab7eb9786ac", 
       "boot_wait": "10s", 
       "http_directory": "http", 
       "headless": true, 
@@ -93,7 +93,7 @@
     }, 
     {
       "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso", 
-      "iso_url": "http://releases.ubuntu.com/16.04/ubuntu-16.04.3-server-amd64.iso", 
+      "iso_url": "http://releases.ubuntu.com/16.04/ubuntu-16.04.6-server-amd64.iso", 
       "ssh_port": 22, 
       "ssh_username": "{{ user `username` }}", 
       "iso_checksum_type": "sha256", 
@@ -146,7 +146,7 @@
       ], 
       "guest_os_type": "Ubuntu_64", 
       "name": "virtualbox-iso-vagrant", 
-      "iso_checksum": "a06cd926f5855d4f21fb4bc9978a35312f815fbda0d0ef7fdc846861f4fc4600", 
+      "iso_checksum": "16afb1375372c57471ea5e29803a89a5a6bd1f6aabea2e5e34ac1ab7eb9786ac", 
       "boot_wait": "10s", 
       "http_directory": "http", 
       "headless": true, 
