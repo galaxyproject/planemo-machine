@@ -18,7 +18,7 @@ RUN apt-get update -y && apt-get install -y software-properties-common && \
             mime-support munge nfs-common nfs-kernel-server pkg-config postgresql-server-dev-9.5 python-pip python-tk \
             rabbitmq-server slurm-llnl xfsprogs nginx-extras nodejs npm emacs24-nox sudo libglib2.0-bin gnome-settings-daemon-schemas \
             locales && \
-    pip install ansible==2.2 && \
+    pip install ansible==2.6.16 && \
     # PPAs upgraded to 2.3 and broke the build. \
     locale-gen en_US.UTF-8 && dpkg-reconfigure locales && \
     localedef -i en_US -f UTF-8 en_US.UTF-8 && \
