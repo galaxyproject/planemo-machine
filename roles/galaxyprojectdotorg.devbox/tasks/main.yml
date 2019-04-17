@@ -27,9 +27,22 @@
     - vim
     - emacs24-nox
 
-# Setup atom (https://atom.io/) ppa and install.
 - name: Add custom PPA (used for atom package)
   apt_repository: repo="ppa:webupd8team/atom" update_cache=yes
+  when: galaxy_devbox_include_x
+
+# Setup atom (https://atom.io/) ppa and install.
+- name: Add key for Atom installation
+  apt_key:
+    url: https://packagecloud.io/AtomEditor/atom/gpgkey
+    state: present
+  when: galaxy_devbox_include_x
+
+- name: Add Atom APT repository
+  apt_repository:
+    repo: deb [arch=amd64] https://packagecloud.io/AtomEditor/atom/any/ any main
+    state: present
+    update_cache: yes
   when: galaxy_devbox_include_x
 
 # Setup komodo-edit ppa and install.
@@ -65,7 +78,7 @@
 
 - name: Add Google key for Chrome installation
   apt_key:
-    url: https://dl.google.com/linux/linux_signing_key.pub
+    url: https://dl-ssl.google.com/linux/linux_signing_key.pub
     state: present
   when: galaxy_devbox_include_x
 
@@ -73,12 +86,15 @@
   apt_repository:
     repo: deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main
     state: present
+    update_cache: yes
   when: galaxy_devbox_include_x
 
 - name: Install Chrome Stable
   apt:
     name: google-chrome-stable
     state: latest
+    # Temporary until Google replace their expired gpg key
+    allow_unauthenticated: yes
   when: galaxy_devbox_include_x
 
 - name: Ensures /etc/lightdm/lightdm.conf.d/ dir exists
@@ -161,10 +177,6 @@
 
 - name: Configure Desktop link to Galaxy web log.
   file: src={{ uwsgi_log if galaxy_uwsgi else galaxy_log_dir + "/galaxy_web0.log" }} dest="{{ dev_user_home }}/Desktop/Galaxy Web Process.log" state=link owner={{ dev_user_name }} group={{ dev_user_group }} force=true
-  when: galaxy_devbox_include_x
-
-- name: Configure Desktop link to Galaxy handler log.
-  file: src={{ galaxy_log_dir }}/handler0.log dest="{{ dev_user_home }}/Desktop/Galaxy Job Handler.log" state=link owner={{ dev_user_name }} group={{ dev_user_group }} force=true
   when: galaxy_devbox_include_x
 
 - name: Install the dev tools
