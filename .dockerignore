@@ -1,4 +1,5 @@
 *.box
 packer_cache
 output-*
-planemo-machine.*
+planemo-machine*
+.git

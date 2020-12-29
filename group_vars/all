@@ -85,7 +85,7 @@ galaxy_master_api_key: HSNiugRFvgT574F43jZ7N9F3
 nginx_proxy_ide: true
 nginx_proxy_reports: false
 nginx_serve_planemo_machine_web: true
-planemo_machine_web_repo: git://github.com/jmchilton/planemo-machine-web.git
+planemo_machine_web_repo: https://github.com/jmchilton/planemo-machine-web.git
 planemo_machine_web_dir: "{{ galaxyFS_base_dir }}/planemo-machine-web"
 small_tool_conf: true
 small_tool_conf_path: /opt/galaxy/tool_conf.min.xml
